@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Flow World</title>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx-ext-sse@2.2.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/easy-speech@2.4.0/dist/EasySpeech.iife.min.js"></script>
+
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: sans-serif;
+            background: #0d0f11;
+        }
+
+        .title {
+            color: white;
+        }
+
+        main {
+            height: 100vh;
+            /* fill viewport height */
+            display: flex;
+            flex-direction: row;
+            /* horizontal side by side */
+            overflow: hidden;
+        }
+
+        .pose {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        model-viewer#human {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+        }
+
+        #difficulty-selector {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .main-layout {
+            display: flex;
+            height: calc(100vh - 4rem);
+            /* minus header */
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        #chat-sidebar {
+            width: 300px;
+            height: 100vh;
+            border-left: 1px solid #ccc;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            background-color: slategray;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        #chat-sidebar.chat-collapsed {
+            transform: translateX(100%);
+        }
+
+        #toggle-chat {
+            position: absolute;
+            left: -40px;
+            top: 1rem;
+            background: #4cbbb9;
+            border: none;
+            border-radius: 6px 0 0 6px;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .chat-panel {
+            height: 100%;
+            /* ✅ Critical fix */
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            background-color: slategray;
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: scroll;
+            margin-bottom: 1rem;
+            padding-right: 0.5rem;
+        }
+
+        .message {
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        #chat-form input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <main hx-ext="sse" sse-connect="/events">
+        <!-- <div class="controls">
+            <div id="difficulty-selector">
+                <label><input type="range" min="1" max="3" step="1" value="2" id="difficulty"> Difficulty</label>
+            </div>
+        </div> -->
+
+
+
+        <div class="pose">
+            <model-viewer id="human" src="/assets/human.glb" alt="human"
+                environment-image="/assets/spruit_sunrise_1k_HDR.hdr" autoplay></model-viewer>
+            <h1 class="title" sse-swap="pose"></h1>
+        </div>
+
+
+
+
+        <aside id="chat-sidebar" class="chat-collapsed">
+            <button id="toggle-chat">💬 Chat</button>
+            <div class="chat-panel">
+                <div id="messages" sse-swap="message" hx-swap="beforeend">
+                </div>
+
+
+                <!-- 
+                <form id="chat-form" hx-post="/chat" hx-trigger="submit" hx-target="#messages" hx-swap="beforeend"
+                    hx-on="htmx:afterRequest: this.reset()">
+                    <input type="text" name="message" placeholder="Say something..." required>
+                </form> -->
+            </div>
+        </aside>
+    </main>
+
+    <audio id="ambient" src="/assets/ambient.mp3" autoplay loop controls></audio>
+    <button id="audio-toggle" aria-label="Play audio" style="
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  background: #4cbbb9;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 9999;
+">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none">
+                <path fill="currentColor" d="M13 4h4v4h-4v9c0 1-.6 3-3 3s-3-2-3-3s.6-3 3-3s3 2 3 3z" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 17V8m0 9c0 1-.6 3-3 3s-3-2-3-3s.6-3 3-3s3 2 3 3m0-9V4h4v4z" />
+            </g>
+        </svg>
+    </button>
+
+
+    <script type="module">
+        const modelViewer = document.querySelector('#human');
+        const speeds = [1, 2, 0.3, -1];
+
+        let i = 0;
+        const play = () => {
+            modelViewer.timeScale = speeds[i++ % speeds.length];
+            modelViewer.play({ repetitions: 1 });
+        };
+        modelViewer.addEventListener('load', play);
+        modelViewer.addEventListener('finished', play);
+    </script>
+
+
+    <script>
+        document.getElementById('toggle-chat').addEventListener('click', () => {
+            const sidebar = document.getElementById('chat-sidebar');
+            sidebar.classList.toggle('chat-collapsed');
+        });
+
+        // document.body.addEventListener('htmx:sseError', function (e) {
+        //     // do something before the event data is swapped in
+        //     console.error('we got an err')
+        //     console.error(e)
+        // })
+    </script>
+
+    <script>
+        // SSE helpers
+        document.body.addEventListener('htmx:sseMessage', function (e) {
+
+            // console.log('sseMessage has fired with e.detail.data as follows')
+            // console.log(e.detail.data) // => <div class="pose" data-pose="{"name":"mountain","displayName":"Mountain Pose","difficulty":1}>Mountain Pose</div>
+
+            const elt = e.detail.elt
+            const el = elt.children[0]
+
+
+            if (!el || !el.dataset.pose) {
+                // the el might be a chat message so we dont handle it further
+                return
+            }
+
+            let pose;
+            try {
+                pose = JSON.parse(el.dataset.pose);
+            } catch (err) {
+                throw new Error('Invalid JSON in data-pose');
+            }
+
+
+            EasySpeech.speak({
+                text: pose.displayName,
+                pitch: 1,
+                rate: 0.8,
+                volume: 0.4,
+                // there are more events, see the API for supported events
+                boundary: e => console.debug('boundary reached')
+            })
+
+            // @todo trigger pose
+
+        })
+
+    </script>
+
+    <script>
+        // audio player
+        const audio = document.getElementById('ambient'); // your audio element
+        const btn = document.getElementById('audio-toggle');
+        const musicIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path fill="currentColor" d="M13 4h4v4h-4v9c0 1-.6 3-3 3s-3-2-3-3s.6-3 3-3s3 2 3 3z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17V8m0 9c0 1-.6 3-3 3s-3-2-3-3s.6-3 3-3s3 2 3 3m0-9V4h4v4z"/></g></svg>'
+        const playIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M1 12C1 5.925 5.925 1 12 1s11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12m8.528-4.882a1 1 0 0 1 1.027.05l6 4a1 1 0 0 1 0 1.664l-6 4A1 1 0 0 1 9 16V8a1 1 0 0 1 .528-.882" clip-rule="evenodd"/></svg>';
+        const pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12zm9-3a1 1 0 1 0-2 0v6a1 1 0 1 0 2 0V9zm4 0a1 1 0 1 0-2 0v6a1 1 0 1 0 2 0V9z" fill="currentColor"/></g></svg>';
+
+
+        btn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = pauseIcon; // <-- use innerHTML here
+                btn.setAttribute('aria-label', 'Pause audio');
+            } else {
+                audio.pause();
+                btn.innerHTML = musicIcon;
+                btn.setAttribute('aria-label', 'Play audio');
+            }
+        });
+
+        audio.addEventListener('play', () => {
+            btn.innerHTML = pauseIcon;
+            btn.setAttribute('aria-label', 'Pause audio');
+        });
+
+        audio.addEventListener('pause', () => {
+            btn.innerHTML = playIcon;
+            btn.setAttribute('aria-label', 'Play audio');
+        });
+
+    </script>
+
+    <script>
+        EasySpeech.init({ maxTimeout: 5000, interval: 250 })
+            .then(() => {
+                console.debug('EasySpeech load complete')
+            })
+            .catch(e => console.error(e))
+    </script>
+
+</body>
+
+</html>

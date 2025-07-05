@@ -1,0 +1,45 @@
+Flow World, A Global Yoga Experience
+
+/* TEAM */
+
+Developer: Christopher Scott Grimmett
+Site: https://flow.world
+Role: Creator, Developer, Designer, Dreamer
+
+Ambient Music: TEMPHUiBIS
+Role: Composer
+Style: Retro-futuristic nature-inspired
+Notes: Temph crafted calming low-BPM ambient music designed to help visitors breathe, stretch, and connect. No rush, just vibes.
+
+3D Avatar: Based on open models and animations, stylized for peaceful presence.
+Front-End: HTMX, Three.js
+Back-End: Node.js (Fastify), Prisma, PostgreSQL
+Real-Time: SSE chat, globally synced flows
+
+/* CONCEPT */
+
+Flow World is a multiplayer yoga experiment.
+A mystical space where everyone on Earth holds the same pose together—one minute at a time.
+
+No logins.
+No usernames.
+No ego.
+Just movement and presence.
+
+Chat is optional.
+Music is ambient.
+Avatar is gentle.
+
+Come as you are.
+
+/* INSPIRATION */
+
+Started with daily stretches in 2019.
+Inspired by YouTube yoga, but craving connection.
+Too shy for in-person classes—so I made my own global one.
+This is the middle ground.
+
+/* CREDITS */
+
+To TEMPHUiBIS – for saying yes and bringing flow to life.
+To the people breathing right now while reading this – thanks for showing up.
