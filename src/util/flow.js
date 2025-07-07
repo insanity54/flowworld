@@ -16,11 +16,9 @@ export function getPoseByName(name) {
 
 
 export function getNextPose(currentPoseName = getRandomPose().name, options = {}) {
-    // console.log(`getNextPose currentPoseName=${currentPoseName}`)
     const transitions = transitionsTable[currentPoseName];
     if (!transitions) {
         throw new Error(`transistions not found for ${currentPoseName}`)
-        return null;
     }
 
     // Handle mirror debt tracking
@@ -32,7 +30,7 @@ export function getNextPose(currentPoseName = getRandomPose().name, options = {}
     // Build adjusted weights
     const weightedTransitions = transitions.map(t => {
         const debt = mirrorDebt[t.next] || 0;
-        const boost = debt > 0 ? debt * 0.3 : 0;
+        const boost = debt > 0 ? debt * 0.7 : 0;
         return { ...t, weight: t.weight + boost };
     });
 
@@ -65,5 +63,8 @@ export function getNextPose(currentPoseName = getRandomPose().name, options = {}
         }
     }
 
-    return getPoseByName(nextName);
+    const pose = getPoseByName(nextName);
+    console.log(`pose selected. pose=${JSON.stringify(pose)}.  mirrorDebt=${JSON.stringify(mirrorDebt)}`)
+
+    return pose
 }

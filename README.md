@@ -47,7 +47,7 @@ A global yoga experience
 Soldier by J-Toastie [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/9wbCF0iWpu)
 Hyper Casual Character by J-Toastie [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/6kFNcL9OnO)
 Animated Human by Quaternius (https://poly.pizza/m/c3Ibh9I3udk)
-
+Stylized Character by Zsky [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/tVqkTeQhCO)
 
 ## doki-doki ideas
 
@@ -93,3 +93,30 @@ There are no logins or identies on flow world, only Bindu. This Bindu is a drop 
 
 * [ ] Our practice is not isolated; it’s part of a web of compassion and awakening.
 * [ ] Achievements are gifts, not just personal accomplishments.
+
+
+### domains
+
+updog.yoga $2
+internet.yoga $52
+bridge.yoga $2
+sphinx.yoga $2
+brake.yoga $2
+break.yoga $2
+catcow.yoga $2
+yogatime.yoga $2
+timeto.yoga $2
+time2.yoga $2
+hold.yoga $2
+breakfor.yoga $2
+flowworld.yoga $2
+forevertogether.yoga $2
+break4.yoga $2
+
+
+### music commission
+
+Hi Temph, I'm building an interactive yoga website and I need some ambient music. Low bpm, calming music to help people meditate and focus. I want your own retro futuristic nature type spin on it. The website works as follows. There's a mystical dark background with a 3d model of a person in the foreground and they hold a pose for 1 minute. Then after that, they switch to a different pose and hold for another minute. The website shows the same exact pose to every visitor at the same time, so it's like all the visitors from around the globe are doing the same yoga class together. And there's going to be a chat so everyone can connect. There's no start or end, so everyone can join at any time and hop into the session. Anyway, that's my project idea I'm working on. Let me know if you can make a track for that. Thank you
+
+Thanks Temph, I really appreciate your help on this. I'm in no rush so please take the full two weeks-- I know the phrase, "You can't rush art" is so true. I'm really excited about this project, it's one that's been floating around in my head for a few years. I started doing yoga stretches every day starting in 2019. Just a few minutes a day but it made me feel a lot better. I started to wonder if I could make yoga an online multiplayer game lol. I follow youtube yoga tutorials and started wanting more connection than what the video can give me, but I think an in-person yoga class requires too much vulnerability. So the yoga website is a middle ground and that's where the idea came from. It's an experiment to see if I can help people by providing yoga flows for focus/relaxation/strength and an optional chat for them to connect. And I've been watching your videos lately and been thinking of you, so I got the idea to see if you could help with the project with an original track. So that's where we are now lol. Happy to hear you'll give it a shot. I look forward to hearing what you come up with. 😀 Let me know if there's anything you need from me.
+

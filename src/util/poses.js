@@ -4,7 +4,7 @@ import { randomOne } from "./random.js";
 
 export const poses = [
     { name: 'mountain', displayName: 'Mountain Pose', difficulty: 1 },
-    { name: 'forwardFold', displayName: 'Forward Fold', difficulty: 1 },
+    { name: 'standingForwardFold', displayName: 'Standing Forward Fold', difficulty: 1 },
     { name: 'ragdoll', displayName: 'Ragdoll', difficulty: 1 },
     { name: 'plank', displayName: 'Plank Pose', difficulty: 2 },
     { name: 'sidePlankR', displayName: 'Side Plank Right', difficulty: 3, mirror: 'sidePlankL' },
@@ -18,8 +18,8 @@ export const poses = [
     { name: 'downDog', displayName: 'Down Dog', difficulty: 3 },
     { name: 'threeLeggedDogL', displayName: 'Three Legged Dog Left', difficulty: 4 },
     { name: 'threeLeggedDogR', displayName: 'Three Legged Dog Right', difficulty: 4 },
-    { name: 'warriorOneL', displayName: 'Warrior One Left', difficulty: 1 },
-    { name: 'warriorOneR', displayName: 'Warrior One Right', difficulty: 1 },
+    { name: 'warriorOneL', displayName: 'Warrior One Left', difficulty: 1, mirror: 'warriorOneR' },
+    { name: 'warriorOneR', displayName: 'Warrior One Right', difficulty: 1, mirror: 'warriorOneL' },
     { name: 'seatedForwardFold', displayName: 'Seated Forward Fold', difficulty: 1 },
     { name: 'seated', displayName: 'Seated', difficulty: 1 },
     { name: 'upDog', displayName: 'Upward Facing Dog', difficulty: 1 },
@@ -36,8 +36,8 @@ export const poses = [
     { name: 'runnersLungeL', displayName: 'Runner\'s Lunge Left', mirror: 'runnersLungeR', difficulty: 1 },
     { name: 'bridge', displayName: 'Bridge Pose', difficulty: 2 },
     { name: 'sphinx', displayName: 'Sphinx Pose', difficulty: 1 },
-    { name: 'triangleL', displayName: 'Triangle Poses Left', difficulty: 1, mirror: 'triangleR' },
-    { name: 'triangleR', displayName: 'Triangle Poses Right', difficulty: 1, mirror: 'triangleL' },
+    { name: 'triangleL', displayName: 'Triangle Pose Left', difficulty: 1, mirror: 'triangleR' },
+    { name: 'triangleR', displayName: 'Triangle Pose Right', difficulty: 1, mirror: 'triangleL' },
 ];
 
 export const mirrors = Object.fromEntries(
@@ -52,36 +52,36 @@ export const transitionsTable = {
     seatedForwardFold: [
         { next: 'seated', weight: 0.1 },
         { next: 'staff', weight: 0.1 },
-        { next: 'forwardFold', weight: 0.1 },
+        { next: 'standingForwardFold', weight: 0.1 },
         { next: 'triangleL', weight: 0.3 },
         { next: 'triangleR', weight: 0.3 },
     ],
     runnersLungeR: [
-        { next: 'forwardFold', weight: 0.5 },
+        { next: 'standingForwardFold', weight: 0.5 },
         { next: 'mountain', weight: 0.5 },
     ],
     runnersLungeL: [
-        { next: 'forwardFold', weight: 0.5 },
+        { next: 'standingForwardFold', weight: 0.5 },
         { next: 'mountain', weight: 0.5 },
     ],
     triangleR: [
         { next: 'seatedForwardFold', weight: 0.5 },
-        { next: 'forwardFold', weight: 0.1 },
+        { next: 'standingForwardFold', weight: 0.1 },
         { next: 'triangleL', weight: 0.9 },
     ],
     triangleL: [
         { next: 'seatedForwardFold', weight: 0.5 },
-        { next: 'forwardFold', weight: 0.1 },
+        { next: 'standingForwardFold', weight: 0.1 },
         { next: 'triangleR', weight: 0.9 },
     ],
     pigeonR: [
         { next: 'pigeonL', weight: 0.5 },
-        { next: 'forwardFold', weight: 0.1 },
+        { next: 'standingForwardFold', weight: 0.1 },
         { next: 'plank', weight: 0.1 },
     ],
     pigeonL: [
         { next: 'pigeonR', weight: 0.5 },
-        { next: 'forwardFold', weight: 0.1 },
+        { next: 'standingForwardFold', weight: 0.1 },
         { next: 'plank', weight: 0.1 },
     ],
     lizardR: [
@@ -105,7 +105,7 @@ export const transitionsTable = {
         { next: 'plank', weight: 0.1 },
     ],
     mountain: [
-        { next: 'forwardFold', weight: 0.9 },
+        { next: 'standingForwardFold', weight: 0.9 },
         { next: 'plank', weight: 0.05 },
         { next: 'ragdoll', weight: 0.5 },
     ],
@@ -138,7 +138,7 @@ export const transitionsTable = {
         { next: 'catCow', weight: 0.5 },
     ],
     downDog: [
-        { next: 'forwardFold', weight: 0.8 },
+        { next: 'standingForwardFold', weight: 0.8 },
         { next: 'threeLeggedDogL', weight: 0.3 },
         { next: 'threeLeggedDogR', weight: 0.3 },
     ],
@@ -150,13 +150,13 @@ export const transitionsTable = {
         { next: 'warriorOneR', weight: 0.5 },
         { next: 'downDog', weight: 0.5 },
     ],
-    forwardFold: [
+    standingForwardFold: [
         { next: 'plank', weight: 0.5 },
         { next: 'halfwayLift', weight: 0.5 },
     ],
     halfwayLift: [
         { next: 'mountain', weight: 0.9 },
-        { next: 'forwardFold', weight: 0.1 },
+        { next: 'standingForwardFold', weight: 0.1 },
     ],
     plank: [
         { next: 'sidePlankL', weight: 0.1 },
@@ -190,7 +190,7 @@ export const transitionsTable = {
     catCow: [
         { next: 'plank', weight: 0.5 },
         { next: 'downDog', weight: 0.2 },
-        { next: 'forwardFold', weight: 0.5 },
+        { next: 'standingForwardFold', weight: 0.5 },
         { next: 'ragdoll', weight: 0.3 }
     ],
     bridge: [
@@ -208,10 +208,12 @@ export const transitionsTable = {
     wildThingL: [
         { next: 'plank', weight: 0.9 },
         { next: 'wildThingR', weight: 0.9 },
+        { next: 'bridge', weight: 0.5 },
     ],
     wildThingR: [
         { next: 'plank', weight: 1.0 },
         { next: 'wildThingL', weight: 0.9 },
+        { next: 'bridge', weight: 0.5 },
     ],
     supportedSidePlankR: [
         { next: 'mountain', weight: 0.01 },

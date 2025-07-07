@@ -16,7 +16,6 @@ export function randomEvent() {
         };
     } else {
         const pose = getNextPose()
-        console.log(`pose selected. pose=${JSON.stringify(pose)}`)
         return {
             event: 'pose',
             data: `<div class="pose" data-pose='${JSON.stringify(pose)}'>${pose.displayName}</div>`

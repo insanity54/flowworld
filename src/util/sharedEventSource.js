@@ -1,9 +1,7 @@
 import EventEmitter from 'events';
 
-import { nanoid } from 'nanoid';
 import { sleep } from '../util/timers.js'
-import { randomEvent } from '../util/random.js'
-
+import { getNextPose } from './flow.js';
 
 class SharedEventSource {
     constructor() {
@@ -13,9 +11,14 @@ class SharedEventSource {
 
     async start() {
         while (true) {
-            await sleep(25);
-            const event = randomEvent();
+            // const event = randomEvent();
+            const pose = getNextPose()
+            const event = {
+                event: 'pose',
+                data: `<div class="pose" data-pose='${JSON.stringify(pose)}'>${pose.displayName}</div>`
+            };
             this.eventEmitter.emit('event', event);
+            await sleep(42000);
         }
     }
 
