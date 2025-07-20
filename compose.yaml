@@ -14,7 +14,7 @@ services:
 
   app:
     build: .
-    container_name: flowworld
+    container_name: app
     env_file: .env
     ports:
       - "3000:3000"
@@ -28,7 +28,7 @@ services:
 
   db:
     image: postgres:16
-    container_name: postgres-db
+    container_name: db
     restart: unless-stopped
     env_file: .env
     volumes:
