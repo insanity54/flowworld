@@ -20,7 +20,7 @@ services:
       - db
     volumes:
       - .:/app
-    command: /usr/local/bin/pnpm dlx prisma migrate deploy && /usr/local/bin/pnpm run start
+    entrypoint: pnpm dlx prisma migrate deploy && pnpm run start
     networks:
       - yoga_net
 
