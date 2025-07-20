@@ -3,19 +3,20 @@ FROM node:22
 WORKDIR /app
 
 # Copy package files first
-COPY package.json package-lock.json .
+COPY package.json package-lock.json ./
 
-# Copy rest of the app
+# Install dependencies first
+RUN npm install
+
+# Copy rest of the app (after installing to avoid cache busting)
 COPY . .
 
-# Copy prisma files and generate client
+# Copy prisma files (redundant if included in the line above, but okay)
 COPY prisma ./prisma
-RUN npx prisma generate
 
-# Install dependencies
-RUN npm install
+# Generate Prisma client
+RUN npx prisma generate
 
 EXPOSE 5000
 
 CMD ["npm", "run", "start"]
-
