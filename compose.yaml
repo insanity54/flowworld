@@ -1,7 +1,8 @@
-version: '3.8'
+
+networks:
+  yoga_net:
 
 services:
-
   caddy:
     image: caddy:alpine
     ports:
@@ -9,7 +10,7 @@ services:
       - "443:443"
     command: caddy reverse-proxy --from multiplayer.yoga --to app:3000
     networks:
-      - default
+      - yoga_net
 
   app:
     build: .
@@ -22,6 +23,8 @@ services:
     volumes:
       - .:/app
     command: npm run start
+    networks:
+      - yoga_net
 
   db:
     image: postgres:16
@@ -32,6 +35,8 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - yoga_net
 
 volumes:
   pgdata:
