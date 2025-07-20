@@ -20,7 +20,7 @@ services:
       - db
     volumes:
       - .:/app
-    entrypoint: npx prisma migrate deploy && npm run start
+    entrypoint: sh -c "npx prisma migrate deploy && npm run start"
     networks:
       - yoga_net
 
