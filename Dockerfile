@@ -18,7 +18,7 @@ RUN pnpm install --frozen-lockfile
 
 # Copy Prisma schema and generate client
 COPY prisma ./prisma
-RUN pnpx prisma generate
+RUN pnpm dlx prisma generate
 
 # Copy the rest of your app's code
 COPY . .
