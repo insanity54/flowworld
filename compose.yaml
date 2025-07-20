@@ -20,7 +20,7 @@ services:
       - db
     volumes:
       - .:/app
-    command: pnpx prisma migrate deploy && pnpm run start
+    command: pnpm dlx prisma migrate deploy && pnpm run start
     networks:
       - yoga_net
 
