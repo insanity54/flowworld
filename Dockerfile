@@ -5,10 +5,14 @@ FROM node:22
 WORKDIR /app
 
 # Copy only package files first (for caching dependencies)
-COPY package.json ./
+COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --ignore-scripts=false --foreground-scripts --verbose
+
+# Copy Prisma schema and generate client
+COPY prisma ./prisma
+RUN npx prisma generate
 
 # Copy the rest of your app's code
 COPY . .
