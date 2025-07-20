@@ -30,7 +30,7 @@ export function getNextPose(currentPoseName = getRandomPose().name, options = {}
     // Build adjusted weights
     const weightedTransitions = transitions.map(t => {
         const debt = mirrorDebt[t.next] || 0;
-        const boost = debt > 0 ? debt * 0.7 : 0;
+        const boost = debt > 0 ? debt * 0.9 : 0;
         return { ...t, weight: t.weight + boost };
     });
 

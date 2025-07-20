@@ -18,7 +18,7 @@ class SharedEventSource {
                 data: `<div class="pose" data-pose='${JSON.stringify(pose)}'>${pose.displayName}</div>`
             };
             this.eventEmitter.emit('event', event);
-            await sleep(42000);
+            await sleep(4);
         }
     }
 

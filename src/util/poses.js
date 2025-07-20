@@ -52,7 +52,7 @@ export const transitionsTable = {
     seatedForwardFold: [
         { next: 'seated', weight: 0.1 },
         { next: 'staff', weight: 0.1 },
-        { next: 'standingForwardFold', weight: 0.1 },
+        { next: 'plank', weight: 0.1 },
         { next: 'triangleL', weight: 0.3 },
         { next: 'triangleR', weight: 0.3 },
     ],
@@ -78,11 +78,16 @@ export const transitionsTable = {
         { next: 'pigeonL', weight: 0.5 },
         { next: 'standingForwardFold', weight: 0.1 },
         { next: 'plank', weight: 0.1 },
+        { next: 'warriorOneR', weight: 0.1 },
+        { next: 'sidePlankR', weight: 0.1 },
     ],
     pigeonL: [
         { next: 'pigeonR', weight: 0.5 },
         { next: 'standingForwardFold', weight: 0.1 },
         { next: 'plank', weight: 0.1 },
+        { next: 'warriorOneL', weight: 0.1 },
+        { next: 'sidePlankL', weight: 0.1 },
+
     ],
     lizardR: [
         { next: 'pigeonR', weight: 0.5 },
@@ -153,6 +158,8 @@ export const transitionsTable = {
     standingForwardFold: [
         { next: 'plank', weight: 0.5 },
         { next: 'halfwayLift', weight: 0.5 },
+        { next: 'sidePlankR', weight: 0.1 },
+        { next: 'sidePlankL', weight: 0.1 },
     ],
     halfwayLift: [
         { next: 'mountain', weight: 0.9 },
@@ -165,7 +172,10 @@ export const transitionsTable = {
         { next: 'upDog', weight: 0.9 },
         { next: 'cobra', weight: 0.9 },
         { next: 'sphinx', weight: 0.9 },
-        { next: 'downDog', weight: 0.2 }
+        { next: 'downDog', weight: 0.2 },
+        { next: 'warriorOneL', weight: 0.3 },
+        { next: 'runnersLungeR', weight: 0.1 },
+        { next: 'runnersLungeL', weight: 0.1 },
     ],
     cobra: [
         { next: 'downDog', weight: 0.9 },

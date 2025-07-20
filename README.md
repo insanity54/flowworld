@@ -97,7 +97,17 @@ There are no logins or identies on flow world, only Bindu. This Bindu is a drop 
 
 ### domains
 
+multiplayer.yoga SELECTED
+flowworld.yoga SELECTED, then deprecated (maybe we can A-B test using this)
+markov.yoga $2
+42second.yoga $2
+alternative.yoga $2
+computer.yoga $2
+voyage.yoga $2
+temp.yoga $2
+player.yoga $2
 updog.yoga $2
+chain.yoga $2
 internet.yoga $52
 bridge.yoga $2
 sphinx.yoga $2
@@ -109,10 +119,10 @@ timeto.yoga $2
 time2.yoga $2
 hold.yoga $2
 breakfor.yoga $2
-flowworld.yoga $2
 forevertogether.yoga $2
 break4.yoga $2
 flowww.yoga $2
+
 
 #### selected domain
 
