@@ -4,7 +4,7 @@ import '@dotenvx/dotenvx/config.js'
 
 const EnvSchema = z.object({
     NODE_ENV: z.enum(['development', 'production', 'test']),
-    PORT: z.coerce.number().default(3000),
+    PORT: z.coerce.number().default(5000),
     DATABASE_URL: z.string().url(),
     ORIGIN: z.string()
 });
