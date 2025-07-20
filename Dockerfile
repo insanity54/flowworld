@@ -1,25 +1,20 @@
-# Use the official Node.js image
 FROM node:22
 
-
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy only package files first (for caching dependencies)
+# Copy package files first
 COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm install --frozen-lockfile
+# Use npm ci for clean install based on lockfile
+RUN npm ci
 
-# Copy Prisma schema and generate client
+# Copy prisma files and generate client
 COPY prisma ./prisma
 RUN npx prisma generate
 
-# Copy the rest of your app's code
+# Copy rest of the app
 COPY . .
 
-# Expose the port your app runs on (adjust if needed)
 EXPOSE 5000
 
-# Start your app
 CMD ["npm", "run", "start"]
