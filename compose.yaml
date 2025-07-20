@@ -18,9 +18,7 @@ services:
     env_file: .env
     depends_on:
       - db
-    volumes:
-      - .:/app
-    entrypoint: sh -c "ls -la /app/node_modules && npx prisma migrate deploy && npm run start"
+    entrypoint: sh -c "ls -la /app/ && npx prisma migrate deploy && npm run start"
     networks:
       - yoga_net
 
