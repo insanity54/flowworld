@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 
 # Install pnpm
-RUN corepack enable
+RUN corepack up
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
