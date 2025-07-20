@@ -11,11 +11,5 @@ RUN npm install
 # Copy rest of the app (after installing to avoid cache busting)
 COPY . .
 
-# Copy prisma files (redundant if included in the line above, but okay)
-COPY prisma ./prisma
-
-# Generate Prisma client
-RUN npx prisma generate
-
 EXPOSE 5000
 
