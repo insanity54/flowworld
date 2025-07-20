@@ -14,6 +14,9 @@ RUN npm install --ignore-scripts=false --foreground-scripts --verbose
 COPY prisma ./prisma
 RUN npx prisma generate
 
+# Deploy migrations
+RUN npx prisma migrate deploy
+
 # Copy the rest of your app's code
 COPY . .
 
