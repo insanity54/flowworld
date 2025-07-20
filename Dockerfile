@@ -1,21 +1,27 @@
 # Use the official Node.js image
 FROM node:22
 
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
 # Set working directory inside the container
 WORKDIR /app
 
 # Copy only package files first (for caching dependencies)
 COPY package.json package-lock.json ./
 
+# Install pnpm
+RUN corepack enable
+
 # Install dependencies
-RUN npm install --ignore-scripts=false --foreground-scripts --verbose
+RUN pnpm install --frozen-lockfile
 
 # Copy Prisma schema and generate client
 COPY prisma ./prisma
-RUN npx prisma generate
+RUN pnpx prisma generate
 
 # Deploy migrations
-RUN npx prisma migrate deploy
+RUN pnpx prisma migrate deploy
 
 # Copy the rest of your app's code
 COPY . .
@@ -24,4 +30,4 @@ COPY . .
 EXPOSE 5000
 
 # Start your app
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "run", "start"]

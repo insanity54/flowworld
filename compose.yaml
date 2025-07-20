@@ -20,7 +20,7 @@ services:
       - db
     volumes:
       - .:/app
-    command: npm run start
+    command: pnpm run start
     networks:
       - yoga_net
 
