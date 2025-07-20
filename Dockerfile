@@ -8,7 +8,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 WORKDIR /app
 
 # Copy only package files first (for caching dependencies)
-COPY package.json package-lock.json ./
+COPY package.json pnpm-lock.yaml ./
 
 # Install pnpm
 RUN corepack enable
