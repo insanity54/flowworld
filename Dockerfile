@@ -20,9 +20,6 @@ RUN pnpm install --frozen-lockfile
 COPY prisma ./prisma
 RUN pnpx prisma generate
 
-# Deploy migrations
-RUN pnpx prisma migrate deploy
-
 # Copy the rest of your app's code
 COPY . .
 
