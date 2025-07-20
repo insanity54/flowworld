@@ -1,6 +1,9 @@
 // ./src/config.js
 import { z } from 'zod';
-import '@dotenvx/dotenvx/config.js'
+import dotenv from '@dotenvx/dotenvx'
+dotenv.config({
+    path: ".env.development.local"
+})
 
 const EnvSchema = z.object({
     NODE_ENV: z.enum(['development', 'production', 'test']),
