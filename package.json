@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently npm:dev:serve",
-    "dev:serve": "node --watch ./src/index.js",
+    "test": "NODE_ENV=test vitest --watch",
+    "dev": "concurrently npm:dev:db npm:dev:serve npm:dev:studio npm:dev:migrate",
+    "dev:serve": "sleep 5; node --watch ./src/index.js",
+    "dev:db": "docker run -p 5432:5432 --name yoga-db --rm -e POSTGRES_PASSWORD=password -e POSTGRES_USER=flow -e POSTGRES_DB=flow_world postgres:17",
+    "dev:migrate": "sleep 5; dotenvx run -f .env.development.local -- npx prisma migrate dev",
+    "dev:studio": "sleep 8; dotenvx run -f .env.development.local -- npx prisma studio",
     "start": "npx prisma generate && node ./src/index.js",
     "preinstall": "npx only-allow npm"
   },
@@ -29,9 +32,15 @@
     "fastify-sse-v2": "^4.2.1",
     "he": "^1.2.0",
     "nanoid": "^5.1.5",
+    "pino": "^9.7.0",
+    "pino-pretty": "^13.0.0",
     "prisma": "^6.11.1",
+    "ramda": "^0.31.3",
     "rate-limiter-flexible": "^7.1.1",
     "zod": "^4.0.5"
   },
-  "packageManager": "npm@11.4.2+sha512.f90c1ec8b207b625d6edb6693aef23dacb39c38e4217fe8c46a973f119cab392ac0de23fe3f07e583188dae9fd9108b3845ad6f525b598742bd060ebad60bff3"
+  "packageManager": "npm@11.4.2+sha512.f90c1ec8b207b625d6edb6693aef23dacb39c38e4217fe8c46a973f119cab392ac0de23fe3f07e583188dae9fd9108b3845ad6f525b598742bd060ebad60bff3",
+  "devDependencies": {
+    "vitest": "^3.2.4"
+  }
 }

@@ -1,6 +1,9 @@
 // yoga.js
+// Be sure to not use "'" in the displayNames as this will cause json stringify errors
 
 import { randomOne } from "./random.js";
+
+
 
 export const poses = [
     { name: 'mountain', displayName: 'Mountain Pose', difficulty: 1 },
@@ -32,8 +35,12 @@ export const poses = [
     { name: 'happyBaby', displayName: 'Happy Baby', difficulty: 1 },
     { name: 'staff', displayName: 'Staff Pose', difficulty: 1 },
     { name: 'kneesToChest', displayName: 'Knees to Chest', sanskrit: 'Apanasana', difficulty: 1 },
-    { name: 'runnersLungeR', displayName: 'Runner\'s Lunge Right', mirror: 'runnersLungeL', difficulty: 1 },
-    { name: 'runnersLungeL', displayName: 'Runner\'s Lunge Left', mirror: 'runnersLungeR', difficulty: 1 },
+    {
+        name: 'runnersLungeR', displayName: 'Runner&apos;s Lunge Right', mirror: 'runnersLungeL', difficulty: 1
+    },
+    {
+        name: 'runnersLungeL', displayName: 'Runner&apos;s Lunge Left', mirror: 'runnersLungeR', difficulty: 1
+    },
     { name: 'bridge', displayName: 'Bridge Pose', difficulty: 2 },
     { name: 'sphinx', displayName: 'Sphinx Pose', difficulty: 1 },
     { name: 'triangleL', displayName: 'Triangle Pose Left', difficulty: 1, mirror: 'triangleR' },

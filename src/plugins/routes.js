@@ -2,7 +2,11 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import he from 'he';
 import crypto from 'node:crypto'
-import sharedEventSource from '../util/sharedEventSource.js';
+import logger from '../util/logger.js';
+import { env } from '../config.js';
+
+import eventHub from '../util/eventHub.js'; // your singleton
+import { emitChatMessage } from '../util/chatProducer.js';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -20,36 +24,61 @@ export default async function routes(fastify) {
     })
 
     fastify.post('/chat', async function (req, reply) {
-        const { message } = req.body;
+        const { content } = req.body;
 
-        const ip = req.ip;
-        const ipHash = crypto.createHash('sha256').update(ip).digest('hex');
 
-        if (!message || typeof message !== 'string') {
-            return reply.code(400).send('Missing message');
+        const hmac = crypto.createHmac('sha256', env.SECRET_KEY);
+        hmac.update(req.ip);
+        const ipHmac = hmac.digest('hex');
+
+
+        if (!content || typeof content !== 'string') {
+            return reply.code(400).send('Missing content');
         }
 
         // log the chat message
         await fastify.prisma.ChatMessage.create({
             data: {
-                content: message,
-                ipHash
+                content,
+                ipHmac
             }
         })
 
-        const responseHtml = `
+        // broadcast html
+        // @see https://github.com/naknomum/solacon
+        const solacon = `
+            <object type="image/svg+xml" style="width: 24px; height: 24px;" id="svg-obj"
+                data="/assets/solacon.svg"
+                data-value="${ipHmac}"
+                data-rgb="0, 30, 255"
+            ></object>
+        `;
+        const broadcastHtml = `
             <div class="message">
-                <strong>You:</strong> ${he.escape(message)}
+                <strong>${solacon}:</strong> ${he.escape(content)}
             </div>
         `;
 
+        // emit the chat via the eventhub
+        emitChatMessage(eventHub, broadcastHtml);
+
+
+
+        // const responseHtml = `
+        //     <div class="message">
+        //         <strong>You:</strong> ${he.escape(content)}
+        //     </div>
+        // `;
+
         reply
-            .type('text/html')
-            .send(responseHtml);
+            .status(200);
+
+
+
     });
 
     fastify.get('/events', (req, res) => {
-        res.sse(sharedEventSource.getAsyncIterator());
+        res.sse(eventHub.getAsyncIterator());
     });
 
 }

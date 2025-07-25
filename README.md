@@ -135,3 +135,48 @@ Hi Temph, I'm building an interactive yoga website and I need some ambient music
 
 Thanks Temph, I really appreciate your help on this. I'm in no rush so please take the full two weeks-- I know the phrase, "You can't rush art" is so true. I'm really excited about this project, it's one that's been floating around in my head for a few years. I started doing yoga stretches every day starting in 2019. Just a few minutes a day but it made me feel a lot better. I started to wonder if I could make yoga an online multiplayer game lol. I follow youtube yoga tutorials and started wanting more connection than what the video can give me, but I think an in-person yoga class requires too much vulnerability. So the yoga website is a middle ground and that's where the idea came from. It's an experiment to see if I can help people by providing yoga flows for focus/relaxation/strength and an optional chat for them to connect. And I've been watching your videos lately and been thinking of you, so I got the idea to see if you could help with the project with an original track. So that's where we are now lol. Happy to hear you'll give it a shot. I look forward to hearing what you come up with. 😀 Let me know if there's anything you need from me.
 
+
+## Dev notes
+
+### create db migration
+
+    dotenvx run -f .env.development.local -- npx prisma migrate dev --name "add xyz"
+
+
+## Reference Photos (for posing in dust3d)
+
+- [ ] mountain  
+- [x] standingForwardFold  
+- [x] ragdoll  
+- [x] plank  
+- [x] sidePlankR  
+- [x] sidePlankL  
+- [x] supportedSidePlankR  
+- [x] supportedSidePlankL  
+- [x] wildThingR  
+- [x] wildThingL  
+- [x] halfwayLift  
+- [x] catCow  
+- [x] downDog  
+- [x] threeLeggedDogL  
+- [x] threeLeggedDogR  
+- [x] warriorOneL  
+- [x] warriorOneR  
+- [x] seatedForwardFold  
+- [x] seated  
+- [x] upDog  
+- [x] cobra  
+- [ ] lizardL  
+- [ ] lizardR  
+- [ ] pigeonL  
+- [ ] pigeonR  
+- [ ] corpse  
+- [ ] happyBaby  
+- [ ] staff  
+- [ ] kneesToChest  
+- [ ] runnersLungeR  
+- [ ] runnersLungeL  
+- [ ] bridge  
+- [ ] sphinx  
+- [ ] triangleL  
+- [ ] triangleR  

@@ -8,14 +8,16 @@ dotenv.config({
 const EnvSchema = z.object({
     NODE_ENV: z.enum(['development', 'production', 'test']),
     PORT: z.coerce.number().default(5000),
-    DATABASE_URL: z.string().url(),
-    ORIGIN: z.string()
+    DATABASE_URL: z.url(),
+    ORIGIN: z.string(),
+    LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
+    SECRET_KEY: z.string(),
 });
 
 const parsed = EnvSchema.safeParse(process.env);
 
 if (!parsed.success) {
-    console.error('❌ Invalid environment variables:', parsed.error.flatten().fieldErrors);
+    console.error('Invalid environment variables:', z.treeifyError(parsed.error));
     process.exit(1);
 }
 

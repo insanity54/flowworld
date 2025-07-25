@@ -1,54 +1,73 @@
 import { poses, transitionsTable, alternatives, mirrors } from "./poses.js";
 import { randomOne } from "./random.js";
+import logger from './logger.js';
 
-const mirrorDebt = {};
+export let mirrorDebt = {};
+let forcedNextPose = null;
 
 export function getRandomPose() {
     return randomOne(poses)
 }
 
 export function getPoseByName(name) {
-    // console.log(`getPoseByName. name=${name}`)
+    logger.debug(`getPoseByName. name=${name}`)
     const pose = poses.find(p => p.name === name);
     if (!pose) throw new Error(`pose ${name} not found.`);
     return pose
 }
 
-
 export function getNextPose(currentPoseName = getRandomPose().name, options = {}) {
+    logger.trace('getNextPose');
+
     const transitions = transitionsTable[currentPoseName];
     if (!transitions) {
-        throw new Error(`transistions not found for ${currentPoseName}`)
+        throw new Error(`transitions not found for ${currentPoseName}`);
     }
 
     // Handle mirror debt tracking
     const mirrorOfCurrent = mirrors[currentPoseName];
     if (mirrorOfCurrent) {
-        mirrorDebt[mirrorOfCurrent] = (mirrorDebt[mirrorOfCurrent] || 0) + 1;
+        mirrorDebt[mirrorOfCurrent] = 1;
+        forcedNextPose = mirrorOfCurrent; // force repayment on next transition
     }
 
-    // Build adjusted weights
-    const weightedTransitions = transitions.map(t => {
-        const debt = mirrorDebt[t.next] || 0;
-        const boost = debt > 0 ? debt * 0.9 : 0;
-        return { ...t, weight: t.weight + boost };
-    });
-
-    // Normalize weights
-    const totalWeight = weightedTransitions.reduce((sum, t) => sum + t.weight, 0);
-    const rand = Math.random() * totalWeight;
-
-    let cumulative = 0;
     let nextName;
-    for (const t of weightedTransitions) {
-        cumulative += t.weight;
-        if (rand < cumulative) {
-            nextName = t.next;
-            break;
+
+    // FORCE repayment of mirror debt if it's one of the valid transitions
+    if (forcedNextPose) {
+        const valid = transitions.find(t => t.next === forcedNextPose);
+        if (valid) {
+            nextName = forcedNextPose;
+            forcedNextPose = null;
         }
     }
 
-    // Pay mirror debt if matched
+    if (!nextName) {
+        // Proceed with normal weighted logic
+        const weightedTransitions = transitions.map(t => {
+            const debt = mirrorDebt[t.next] || 0;
+            const boost = debt > 0 ? debt * 0.9 : 0;
+            return { ...t, weight: t.weight + boost };
+        });
+
+        const totalWeight = weightedTransitions.reduce((sum, t) => sum + t.weight, 0);
+        const rand = Math.random() * totalWeight;
+
+        let cumulative = 0;
+        for (const t of weightedTransitions) {
+            cumulative += t.weight;
+            if (rand < cumulative) {
+                nextName = t.next;
+                break;
+            }
+        }
+
+        if (!nextName) {
+            throw new Error(`No valid next pose found from ${currentPoseName}`);
+        }
+    }
+
+    // Repay mirror debt if matched
     if (mirrorDebt[nextName]) {
         mirrorDebt[nextName] = 0;
     }
@@ -64,7 +83,8 @@ export function getNextPose(currentPoseName = getRandomPose().name, options = {}
     }
 
     const pose = getPoseByName(nextName);
-    console.log(`pose selected. pose=${JSON.stringify(pose)}.  mirrorDebt=${JSON.stringify(mirrorDebt)}`)
+    logger.debug(`pose selected. pose=${JSON.stringify(pose)}. mirrorDebt=${JSON.stringify(mirrorDebt)}`);
 
-    return pose
+    return pose;
 }
+

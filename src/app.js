@@ -16,7 +16,6 @@ const __dirname = path.dirname(__filename)
 export function buildApp() {
     const app = Fastify()
 
-
     app.register(fastifyFavicon, { path: './src/assets' })
     app.register(fastifyFormbody) // for htmx
     // app.register(fastifyFlash)

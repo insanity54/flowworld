@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <link type="text/plain" rel="author" href="/humans.txt">
-    <title>Flow World</title>
+    <title>multiplayer.yoga</title>
 
     <!-- HTMX & Extras -->
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6"></script>
@@ -86,7 +86,7 @@
             top: 0;
             right: 0;
             /* to the left of the tabs container */
-            height: 100vh;
+            height: 96vh;
             width: 300px;
             background: #222;
             color: white;
@@ -175,7 +175,7 @@
             gap: 0.5em;
         }
 
-        input {
+        input.spaced {
             margin-bottom: 2.5em;
         }
 
@@ -225,6 +225,12 @@
                 <div id="messages" sse-swap="message" hx-swap="beforeend">
                     <!-- SSE messages will go here -->
                 </div>
+
+                <!-- Chat input form using HTMX -->
+                <form id="chat-form" hx-post="/chat" hx-trigger="submit" hx-target="#messages" hx-swap="beforeend">
+                    <input type="text" name="content" placeholder="Type a message..." required autocomplete="off" />
+                    <button class="btn" type="submit">Send</button>
+                </form>
             </div>
 
             <!-- Panel: Settings -->
@@ -238,27 +244,29 @@
                 <form>
                     <label>
                         TTS Enabled
-                        <input type="checkbox" x-model="$store.settings.ttsEnabled">
+                        <input class="spaced" type="checkbox" x-model="$store.settings.ttsEnabled">
                     </label>
 
                     <label>
                         TTS Volume
-                        <input type="range" min="0" max="1" step="0.001" x-model="$store.settings.ttsVolume">
+                        <input class="spaced" type="range" min="0" max="1" step="0.001"
+                            x-model="$store.settings.ttsVolume">
                     </label>
 
                     <label>
                         TTS Pose counter
-                        <input type="checkbox" x-model="$store.settings.ttsCounter">
+                        <input class="spaced" type="checkbox" x-model="$store.settings.ttsCounter">
                     </label>
 
                     <label>
                         BGM Enabled
-                        <input type="checkbox" x-model="$store.settings.bgmEnabled">
+                        <input class="spaced" type="checkbox" x-model="$store.settings.bgmEnabled">
                     </label>
 
                     <label>
-                        BGM Volume!
-                        <input type="range" min="0" max="1" step="0.01" x-model="$store.settings.bgmVolume">
+                        BGM Volume
+                        <input class="spaced" type="range" min="0" max="1" step="0.01"
+                            x-model="$store.settings.bgmVolume">
                     </label>
 
 
@@ -280,27 +288,6 @@
     </main>
 
 
-    <script type="module">
-        // const modelViewer = document.querySelector('#human');
-        // const speeds = [1, 2, 0.1, -1];
-
-        // let i = 0;
-        // const play = () => {
-        //     modelViewer.timeScale = speeds[i++ % speeds.length];
-        //     modelViewer.play({ repetitions: 1 });
-        // };
-        // modelViewer.addEventListener('load', play);
-        // modelViewer.addEventListener('finished', play);
-        // // modelViewer.animationName = 'Man_Walk'
-        // console.log(modelViewer)
-
-        // self.setInterval(() => {
-        //     modelViewer.animationName = modelViewer.animationName === 'Man_Run' ?
-        //         'Man_Walk' : 'Man_Run';
-        // }, 1500.0);
-
-
-    </script>
     <script>
         // function updateAnimation(name) {
         // modelViewer.animationName = name
@@ -333,9 +320,10 @@
 
             let pose;
             try {
+                console.log(el.dataset.pose)
                 pose = JSON.parse(el.dataset.pose);
             } catch (err) {
-                throw new Error('Invalid JSON in data-pose');
+                throw new Error(`Invalid JSON in data-pose. err=${err}`);
             }
 
             const vol = Number(Alpine.store('settings').ttsVolume);
@@ -352,7 +340,6 @@
                     boundary: e => console.debug('boundary reached')
                 });
             }
-
 
             const poses = ['HumanArmature|Man_Clapping', 'HumanArmature|Man_Death', 'HumanArmature|Man_Idle', 'HumanArmature|Man_Jump', 'HumanArmature|Man_Punch', 'HumanArmature|Man_Run', 'HumanArmature|Man_RunningJump',
                 'HumanArmature|Man_Sitting', 'HumanArmature|Man_Standing', 'HumanArmature|Man_SwordSlash', 'HumanArmature|Man_Walk']

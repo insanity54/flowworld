@@ -3,6 +3,7 @@ import EventEmitter from 'events';
 import { sleep } from '../util/timers.js'
 import { getNextPose } from './flow.js';
 
+
 class SharedEventSource {
     constructor() {
         this.eventEmitter = new EventEmitter();
@@ -11,14 +12,13 @@ class SharedEventSource {
 
     async start() {
         while (true) {
-            // const event = randomEvent();
             const pose = getNextPose()
             const event = {
                 event: 'pose',
                 data: `<div class="pose" data-pose='${JSON.stringify(pose)}'>${pose.displayName}</div>`
             };
             this.eventEmitter.emit('event', event);
-            await sleep(4);
+            await sleep(420);
         }
     }
 
@@ -31,17 +31,19 @@ class SharedEventSource {
         let listening = true;
 
         const onEvent = (data) => {
+            if (!listening) return;
+
             if (resolveNext) {
                 resolveNext({ value: data, done: false });
                 resolveNext = null;
-            } else {
+            } else if (queue.length < 100) { // prevent unbounded growth
                 queue.push(data);
             }
         };
 
         emitter.on(eventName, onEvent);
 
-        return {
+        const iterator = {
             async next() {
                 if (!listening) return { done: true };
 
@@ -53,16 +55,23 @@ class SharedEventSource {
                     resolveNext = resolve;
                 });
             },
-            return() {
-                listening = false;
-                emitter.off(eventName, onEvent);
+            async return() {
+                if (listening) {
+                    listening = false;
+                    emitter.off(eventName, onEvent);
+                    queue.length = 0;
+                    if (resolveNext) resolveNext({ done: true });
+                }
                 return { done: true };
             },
             [Symbol.asyncIterator]() {
                 return this;
             }
         };
+
+        return iterator;
     }
+
 }
 
 // Export a singleton instance

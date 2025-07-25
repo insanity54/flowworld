@@ -9,6 +9,9 @@ services:
       - "80:80"
       - "443:443"
     command: caddy reverse-proxy --from multiplayer.yoga --to app:5000
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
     networks:
       - yoga_net
 
@@ -36,3 +39,5 @@ services:
 
 volumes:
   pgdata:
+  caddy_data:
+  caddy_config:
