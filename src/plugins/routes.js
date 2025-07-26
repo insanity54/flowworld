@@ -4,6 +4,9 @@ import he from 'he';
 import crypto from 'node:crypto'
 import logger from '../util/logger.js';
 import { env } from '../config.js';
+import { createAvatar } from '@dicebear/core';
+import { funEmoji } from '@dicebear/collection';
+
 
 import eventHub from '../util/eventHub.js'; // your singleton
 import { emitChatMessage } from '../util/chatProducer.js';
@@ -26,9 +29,9 @@ export default async function routes(fastify) {
     fastify.post('/chat', async function (req, reply) {
         const { content } = req.body;
 
-
+        console.log(req)
         const hmac = crypto.createHmac('sha256', env.SECRET_KEY);
-        hmac.update(req.ip);
+        hmac.update(req.realIp);
         const ipHmac = hmac.digest('hex');
 
 
@@ -44,31 +47,25 @@ export default async function routes(fastify) {
             }
         })
 
-        // broadcast html
-        // @see https://github.com/naknomum/solacon
-        const solacon = `
-            <object type="image/svg+xml" style="width: 24px; height: 24px;" id="svg-obj"
-                data="/assets/solacon.svg"
-                data-value="${ipHmac}"
-                data-rgb="0, 30, 255"
-            ></object>
-        `;
+
+        const avatar = createAvatar(funEmoji, {
+            seed: ipHmac,
+            radius: 50,
+            size: 24,
+        });
+
+        const svg = avatar.toString();
+
+
         const broadcastHtml = `
             <div class="message">
-                <strong>${solacon}:</strong> ${he.escape(content)}
+                ${svg}: ${he.escape(content)}
             </div>
         `;
 
         // emit the chat via the eventhub
         emitChatMessage(eventHub, broadcastHtml);
 
-
-
-        // const responseHtml = `
-        //     <div class="message">
-        //         <strong>You:</strong> ${he.escape(content)}
-        //     </div>
-        // `;
 
         reply
             .status(200);

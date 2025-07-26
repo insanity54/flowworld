@@ -11,7 +11,7 @@ const EnvSchema = z.object({
     DATABASE_URL: z.url(),
     ORIGIN: z.string(),
     LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
-    SECRET_KEY: z.string(),
+    COOKIE_SECRET: z.string(),
 });
 
 const parsed = EnvSchema.safeParse(process.env);

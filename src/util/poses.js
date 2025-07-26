@@ -4,7 +4,7 @@
 import { randomOne } from "./random.js";
 
 
-
+// @todo sidePlankR, sidePlankL
 export const poses = [
     { name: 'mountain', displayName: 'Mountain Pose', difficulty: 1 },
     { name: 'standingForwardFold', displayName: 'Standing Forward Fold', difficulty: 1 },
@@ -43,8 +43,8 @@ export const poses = [
     },
     { name: 'bridge', displayName: 'Bridge Pose', difficulty: 2 },
     { name: 'sphinx', displayName: 'Sphinx Pose', difficulty: 1 },
-    { name: 'triangleL', displayName: 'Triangle Pose Left', difficulty: 1, mirror: 'triangleR' },
-    { name: 'triangleR', displayName: 'Triangle Pose Right', difficulty: 1, mirror: 'triangleL' },
+    { name: 'headToKneeL', displayName: 'Head to Knee Pose Left', difficulty: 1, mirror: 'headToKneeR' },
+    { name: 'headToKneeR', displayName: 'Head to Knee Pose Right', difficulty: 1, mirror: 'headToKneeL' },
 ];
 
 export const mirrors = Object.fromEntries(
@@ -60,8 +60,8 @@ export const transitionsTable = {
         { next: 'seated', weight: 0.1 },
         { next: 'staff', weight: 0.1 },
         { next: 'plank', weight: 0.1 },
-        { next: 'triangleL', weight: 0.3 },
-        { next: 'triangleR', weight: 0.3 },
+        { next: 'headToKneeL', weight: 0.3 },
+        { next: 'headToKneeR', weight: 0.3 },
     ],
     runnersLungeR: [
         { next: 'standingForwardFold', weight: 0.5 },
@@ -71,15 +71,15 @@ export const transitionsTable = {
         { next: 'standingForwardFold', weight: 0.5 },
         { next: 'mountain', weight: 0.5 },
     ],
-    triangleR: [
+    headToKneeR: [
         { next: 'seatedForwardFold', weight: 0.5 },
         { next: 'standingForwardFold', weight: 0.1 },
-        { next: 'triangleL', weight: 0.9 },
+        { next: 'headToKneeL', weight: 0.9 },
     ],
-    triangleL: [
+    headToKneeL: [
         { next: 'seatedForwardFold', weight: 0.5 },
         { next: 'standingForwardFold', weight: 0.1 },
-        { next: 'triangleR', weight: 0.9 },
+        { next: 'headToKneeR', weight: 0.9 },
     ],
     pigeonR: [
         { next: 'pigeonL', weight: 0.5 },

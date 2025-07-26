@@ -277,11 +277,10 @@
 
         </div>
 
+        <model-viewer id="human" src="/assets/man_12.gltf" animation-name="Mountain" alt="human" shadow-intensity="1"
+            auto-rotate disable-zoom touch-action="pan-y" environment-image="/assets/spruit_sunrise_1k_HDR.hdr" autoplay
+            camera-orbit="0deg 80deg 6m" camera-target="0m 0.7m 0m" animation-crossfade-duration="500"></model-viewer>
 
-
-        <model-viewer id="human" src="/assets/Man.glb" animation-name="HumanArmature|Man_Punch" alt="human"
-            shadow-intensity="1" auto-rotate disable-zoom touch-action="pan-y"
-            environment-image="/assets/spruit_sunrise_1k_HDR.hdr" autoplay></model-viewer>
         <h1 class="title" sse-swap="pose"></h1>
 
 
@@ -329,7 +328,7 @@
             const vol = Number(Alpine.store('settings').ttsVolume);
             const count = Alpine.store('settings').ttsCounter ? Alpine.store('app').incrPoseCount() : 0
             const text = Alpine.store('settings').ttsCounter ? `${Alpine.store('app').poseCount} ${pose.displayName}` : pose.displayName
-            // console.log(`ttsVoluem=${vol}`)
+
             // Check Alpine settings before speaking
             if (Alpine.store('settings').ttsEnabled) {
                 EasySpeech.speak({
@@ -341,13 +340,8 @@
                 });
             }
 
-            const poses = ['HumanArmature|Man_Clapping', 'HumanArmature|Man_Death', 'HumanArmature|Man_Idle', 'HumanArmature|Man_Jump', 'HumanArmature|Man_Punch', 'HumanArmature|Man_Run', 'HumanArmature|Man_RunningJump',
-                'HumanArmature|Man_Sitting', 'HumanArmature|Man_Standing', 'HumanArmature|Man_SwordSlash', 'HumanArmature|Man_Walk']
-            const randomPose = poses[Math.floor(Math.random() * poses.length)];
-
-            // console.log(modelViewer.animationName)
             const modelViewer = document.querySelector('#human')
-            modelViewer.animationName = randomPose;
+            modelViewer.animationName = pose.name;
         })
 
 
