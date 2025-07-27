@@ -4,35 +4,36 @@ A global yoga experience
 
 ## Project Requirements
 
-* [ ] Global flow, a randomly selected flow that everyone can do together with a chat. Each pose is held for 1 minute.
-* [ ] This is a zero-stress website. We don't give the user any opportunities to fail.
-* [ ] NO LOGINS/ACCOUNTS. LOGINS ARE STRESSFUL.
-* [ ] No ego, no vanity. No usernames, no reputation, no stored identities. 
-* [ ] Yoga pose displays on screen
-* [ ] pose name displays on screen
-* [ ] Chat displays on screen
-* [ ] Moderated chat
+* [x] Global flow, a randomly selected flow that everyone can do together with a chat. Each pose is held for 42 seconds.
+* [x] This is a zero-stress website. We don't give the user any opportunities to fail.
+* [x] NO LOGINS/ACCOUNTS. LOGINS ARE STRESSFUL.
+* [x] No ego, no vanity. No usernames, no reputation, no stored identities. 
+* [x] Yoga pose displays on screen
+* [x] pose name displays on screen
+* [x] Chat displays on screen
+* [x] Flow randomizer creates random flows
+* [x] SSE global flow, chat
+* [x] htmx chat POSTs
+* [x] Pose name is read aloud by TTS
+* [x] Orbit around the character by default
+* [x] Moderated chat
+* [ ] chat history
 * [ ] Flows stored in db
 * [ ] users can create flows
-* [ ] Flow randomizer creates random flows
 * [ ] Flow upvoting
 * [ ] Pose upvoting
 * [ ] GLOBAL flow session on the main page.
 * [ ] Bookmarkable flows
 * [ ] Difficulty slider, which shows alternative poses. For example, advanced would show three legged dog, Intermediate would show downdog, while beginner would show puppy pose. This lets all participants be doing approximately the same pose at the same datetime.
-* [ ] SSE global flow, chat
-* [ ] htmx chat POSTs
 * [ ] hypermedia
 * [ ] cute 3d avatar doing the global poses
 * [ ] Three.js 
 * [ ] Optional ambient music (inspired by https://ambient.garden/)
-* [ ] Pose name is read aloud by TTS
 * [ ] flow creator
 * [ ] pose creator
 * [ ] share your flow via [cool URL](https://www.w3.org/Provider/Style/URI)
 * [ ] Proof-of-Work antispam
 * [ ] No burdened 3rd party software licensing
-* [ ] Orbit around the character by default
 * [ ] basic camera controls
 * [ ] tipping with LN/Zaps
 * [ ] tipping with Paypal

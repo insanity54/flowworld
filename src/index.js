@@ -13,33 +13,33 @@ import he from 'he';
 startPoseProducer(eventHub);
 
 
-setTimeout(() => {
-    const pose = { name: 'bridge', displayName: 'Bridge Pose', difficulty: 2 }
-    eventHub.emit('pose', `<div class="pose" data-pose='${JSON.stringify(pose)}'>${pose.displayName}</div>`)
-}, 5000)
+// setTimeout(() => {
+//     const pose = { name: 'bridge', displayName: 'Bridge Pose', difficulty: 2 }
+//     eventHub.emit('pose', `<div class="pose" data-pose='${JSON.stringify(pose)}'>${pose.displayName}</div>`)
+// }, 5000)
 
 
-setTimeout(() => {
-    const content = 'this is a test message';
-    const chat = `<div class="message">
-                    <strong>You:</strong> ${he.escape(content)}
-                </div>`
-    eventHub.emit('message', chat)
-}, 3000)
-setTimeout(() => {
-    const content = 'this is a test message';
-    const chat = `<div class="message">
-                    <strong>You:</strong> ${he.escape(content)}
-                </div>`
-    eventHub.emit('message', chat)
-}, 6000)
-setTimeout(() => {
-    const content = 'this is a test message';
-    const chat = `<div class="message">
-                    <strong>You:</strong> ${he.escape(content)}
-                </div>`
-    eventHub.emit('message', chat)
-}, 9000)
+// setTimeout(() => {
+//     const content = 'this is a test message';
+//     const chat = `<div class="message">
+//                     <strong>You:</strong> ${he.escape(content)}
+//                 </div>`
+//     eventHub.emit('message', chat)
+// }, 3000)
+// setTimeout(() => {
+//     const content = 'this is a test message';
+//     const chat = `<div class="message">
+//                     <strong>You:</strong> ${he.escape(content)}
+//                 </div>`
+//     eventHub.emit('message', chat)
+// }, 6000)
+// setTimeout(() => {
+//     const content = 'this is a test message';
+//     const chat = `<div class="message">
+//                     <strong>You:</strong> ${he.escape(content)}
+//                 </div>`
+//     eventHub.emit('message', chat)
+// }, 9000)
 
 
 

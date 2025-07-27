@@ -10,7 +10,7 @@ export function getRandomPose() {
 }
 
 export function getPoseByName(name) {
-    logger.debug(`getPoseByName. name=${name}`)
+    logger.trace(`getPoseByName. name=${name}`)
     const pose = poses.find(p => p.name === name);
     if (!pose) throw new Error(`pose ${name} not found.`);
     return pose
@@ -23,6 +23,8 @@ export function getNextPose(currentPoseName = getRandomPose().name, options = {}
     if (!transitions) {
         throw new Error(`transitions not found for ${currentPoseName}`);
     }
+
+
 
     // Handle mirror debt tracking
     const mirrorOfCurrent = mirrors[currentPoseName];

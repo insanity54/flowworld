@@ -8,7 +8,7 @@ if (env.NODE_ENV === 'test') {
     const prettify = prettyFactory({ sync: true, colorize: true })
     hooks = {
         streamWrite: (s) => {
-            console.log(prettify(s)) // Mirror to console.log during tests. @see https://github.com/pinojs/pino/issues/2148
+            logger.info(prettify(s)) // Mirror to logger.info during tests. @see https://github.com/pinojs/pino/issues/2148
             return s
         },
     }

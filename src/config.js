@@ -12,12 +12,14 @@ const EnvSchema = z.object({
     ORIGIN: z.string(),
     LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
     COOKIE_SECRET: z.string(),
+    INFERENCE_API_KEY: z.string(),
+    AKISMET_API_KEY: z.string(),
 });
 
 const parsed = EnvSchema.safeParse(process.env);
 
 if (!parsed.success) {
-    console.error('Invalid environment variables:', z.treeifyError(parsed.error));
+    logger.error('Invalid environment variables:', z.treeifyError(parsed.error));
     process.exit(1);
 }
 

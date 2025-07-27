@@ -66,8 +66,14 @@ model ChatMessage {
   content   String
   createdAt DateTime @default(now())
   moderated Boolean  @default(false)
-  ipHmac    String // for moderation / spam tracking without identity
+  userId    String // for moderation / spam tracking
   flowId    String? // global chat or per-flow
+}
+
+model GlobalState {
+  id        String   @id @default(cuid())
+  poseName  String
+  updatedAt DateTime @updatedAt
 }
 
 model UserFlow {

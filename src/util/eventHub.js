@@ -8,14 +8,14 @@ class EventHub {
     }
 
     emit(eventName, html) {
-        logger.debug(`eventHub emitting eventName=${eventName} html=${html}`)
+        logger.trace(`eventHub emitting eventName=${eventName} html=${html}`)
         this.emitter.emit('event', { event: eventName, data: html });
     }
 
     async *getAsyncIterator() {
         const queue = [];
         const onEvent = (payload) => {
-            logger.debug('event received for SSE', payload);
+            logger.trace('event received for SSE', payload);
             queue.push(payload); // must be { event, data }
         };
         this.emitter.on('event', onEvent);
@@ -26,11 +26,11 @@ class EventHub {
                     await new Promise(resolve => setImmediate(resolve));
                 }
                 const html = queue.shift();
-                logger.debug('yielding html to SSE stream', html);
+                logger.trace('yielding html to SSE stream', html);
                 yield html;
             }
         } finally {
-            logger.debug('SSE iterator cleanup');
+            logger.trace('SSE iterator cleanup');
             this.emitter.off('event', onEvent);
         }
     }

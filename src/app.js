@@ -9,14 +9,20 @@ import fastifyView from "@fastify/view";
 import ejs from 'ejs'
 import { fileURLToPath } from 'node:url'
 import { FastifySSEPlugin } from "fastify-sse-v2";
-import fastifySecureSession from '@fastify/secure-session'
-import { env } from './config.js'
+import fastifySecureSession from '@fastify/secure-session';
+import { env } from './config.js';
+import fastifyRateLimit from '@fastify/rate-limit';
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export function buildApp() {
     const app = Fastify()
+
+    app.register(fastifyRateLimit, {
+        max: 180,
+        timeWindow: '1 minute'
+    })
 
     app.register(fastifySecureSession, {
         // the name of the attribute decorated on the request-object, defaults to 'session'
