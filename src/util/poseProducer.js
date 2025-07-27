@@ -2,6 +2,7 @@ import { sleep } from '../util/timers.js';
 import { getNextPose } from './flow.js';
 import { withAccelerate } from "@prisma/extension-accelerate"
 import { PrismaClient } from '@prisma/client';
+import { env } from '../config.js';
 
 const prisma = new PrismaClient().$extends(withAccelerate())
 
@@ -16,6 +17,6 @@ export async function startPoseProducer(eventHub) {
         });
 
         eventHub.emit('pose', `<div class="pose" data-pose='${JSON.stringify(pose)}'>${pose.displayName}</div>`);
-        await sleep(4200);
+        await sleep(env.POSE_INTERVAL);
     }
 }

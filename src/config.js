@@ -1,9 +1,11 @@
 // ./src/config.js
 import { z } from 'zod';
 import dotenv from '@dotenvx/dotenvx'
+import logger from './util/logger.js';
 dotenv.config({
     path: ".env.development.local"
 })
+
 
 const EnvSchema = z.object({
     NODE_ENV: z.enum(['development', 'production', 'test']),
@@ -13,7 +15,7 @@ const EnvSchema = z.object({
     LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
     COOKIE_SECRET: z.string(),
     INFERENCE_API_KEY: z.string(),
-    AKISMET_API_KEY: z.string(),
+    POSE_INTERVAL: z.coerce.number().default(42000),
 });
 
 const parsed = EnvSchema.safeParse(process.env);
