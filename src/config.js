@@ -1,7 +1,7 @@
 // ./src/config.js
 import { z } from 'zod';
 import dotenv from '@dotenvx/dotenvx'
-import logger from './util/logger.js';
+
 dotenv.config({
     path: ".env.development.local"
 })
@@ -21,7 +21,7 @@ const EnvSchema = z.object({
 const parsed = EnvSchema.safeParse(process.env);
 
 if (!parsed.success) {
-    logger.error('Invalid environment variables:', z.treeifyError(parsed.error));
+    console.error('Invalid environment variables:', z.treeifyError(parsed.error));
     process.exit(1);
 }
 
