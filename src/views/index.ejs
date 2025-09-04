@@ -35,10 +35,10 @@
             })
             Alpine.store('settings', {
                 ttsEnabled: Alpine.$persist(true).using(sessionStorage),
-                ttsVolume: Alpine.$persist(0.8).using(sessionStorage),
+                ttsVolume: Alpine.$persist(0.1).using(sessionStorage),
                 ttsCounter: Alpine.$persist(false).using(sessionStorage),
                 bgmEnabled: Alpine.$persist(true).using(sessionStorage),
-                bgmVolume: Alpine.$persist(0.6).using(sessionStorage),
+                bgmVolume: Alpine.$persist(0.3).using(sessionStorage),
             });
         });
     </script>
