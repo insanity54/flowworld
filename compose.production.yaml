@@ -1,19 +1,5 @@
 
-networks:
-  yoga_net:
-
 services:
-  caddy:
-    image: caddy:alpine
-    ports:
-      - "80:80"
-      - "443:443"
-    command: caddy reverse-proxy --from multiplayer.yoga --to app:5000
-    volumes:
-      - caddy_data:/data
-      - caddy_config:/config
-    networks:
-      - yoga_net
 
   app:
     build: .
@@ -22,8 +8,7 @@ services:
     depends_on:
       - db
     entrypoint: npm run start
-    networks:
-      - yoga_net
+
 
   db:
     image: postgres:16
@@ -34,10 +19,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    networks:
-      - yoga_net
+
 
 volumes:
   pgdata:
-  caddy_data:
-  caddy_config:
