@@ -2,8 +2,13 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link type="text/plain" rel="author" href="/humans.txt">
+    <link rel="stylesheet" href="/assets/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+
+
     <title>multiplayer.yoga</title>
 
     <!-- HTMX & Extras -->
@@ -38,260 +43,196 @@
                 ttsVolume: Alpine.$persist(0.1).using(sessionStorage),
                 ttsCounter: Alpine.$persist(false).using(sessionStorage),
                 bgmEnabled: Alpine.$persist(true).using(sessionStorage),
-                bgmVolume: Alpine.$persist(0.3).using(sessionStorage),
+                bgmVolume: Alpine.$persist(0.5).using(sessionStorage),
+                howl: null
             });
+
+            adjustBgm()
+
         });
+
     </script>
 
+
     <style>
-        /* @see https://www.joshwcomeau.com/css/custom-css-reset/ */
-        /* 1. Use a more-intuitive box-sizing model */
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-        }
-
-        /* 2. Remove default margin */
-        * {
-            margin: 0;
-        }
-
-        /* 3. Enable keyword animations */
-        @media (prefers-reduced-motion: no-preference) {
-            html {
-                interpolate-size: allow-keywords;
-            }
-        }
-
-        body {
-            /* 4. Add accessible line-height */
-            line-height: 1.5;
-            /* 5. Improve text rendering */
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* 6. Improve media defaults */
-        img,
-        picture,
-        video,
-        canvas,
-        svg {
-            display: block;
-            max-width: 100%;
-        }
-
-        /* 7. Inherit fonts for form controls */
-        input,
-        button,
-        textarea,
-        select {
-            font: inherit;
-        }
-
-        /* 8. Avoid text overflows */
-        p,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            overflow-wrap: break-word;
-        }
-
-        /* 9. Improve line wrapping */
-        p {
-            text-wrap: pretty;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            text-wrap: balance;
-        }
-
-        /*
-        10. Create a root stacking context
-        */
-        #root,
-        #__next {
-            isolation: isolate;
-        }
-
-        /* Default (Light mode) */
-        body {
-            background: #fff;
-            color: #000;
-        }
-
-        /* Auto Dark Mode */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: #121212;
-                color: #eee;
-            }
-        }
-
         model-viewer#human {
-            width: 100vw;
+            width: 100%;
             height: 100vh;
-            object-fit: contain;
         }
 
         .title {
             position: absolute;
             bottom: 0;
-        }
-
-
-        .sidebar-tab-container {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 50px;
-            height: 100vh;
-            background: #111;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 8px;
-            z-index: 1001;
-            /* above panel */
-        }
-
-        .tab-button {
-            position: absolute;
-            right: 8px;
-            width: 34px;
-            height: 34px;
-            font-size: 20px;
-            background: #333;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-
-        /* Sidebar panel (sliding content area) */
-        .sidebar-panel {
-            position: fixed;
-            top: 0;
-            right: 50px;
-            width: 300px;
-            height: 100vh;
-            background: #222;
-            color: white;
-            border-left: 1px solid #444;
-            box-shadow: -4px 0 8px rgba(0, 0, 0, 0.5);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-
-            display: flex;
-            flex-direction: column;
-            padding: 16px;
-            box-sizing: border-box;
-        }
-
-
-        /* When a tab is active, slide the panel into view */
-        .sidebar-panel.active {
-            transform: translateX(0);
-        }
-
-        .message {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 4px 8px;
-            line-height: 1.4;
-        }
-
-
-        #messages {
-            flex: 1 1 auto;
-            overflow-y: auto;
-            margin-bottom: 1em;
-            background: #111;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #444;
-        }
-
-        .sidebar-panel form label {
-            display: block;
-            margin-bottom: 16px;
-            /* Add space between controls */
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .sidebar-panel input.spaced {
-            display: block;
-            margin-top: 4px;
-            /* Slight spacing from label text */
-        }
-
-        /* Optional: make sure the form doesn't stretch weirdly */
-        #chat-form {
-            display: flex;
-            gap: 0.5em;
-        }
-
-        #chat-form input[type="text"] {
-            flex-grow: 1;
-        }
-
-        #chat-form button {
-            flex-shrink: 0;
-        }
-
-        #chat-form {
-            display: flex;
-            gap: 0.5em;
-        }
-
-        #chat-form input[type="text"] {
-            flex-grow: 1;
-        }
-
-        #chat-form button {
-            flex-shrink: 0;
+            padding-left: 0.5rem;
         }
     </style>
 </head>
 
 <body x-data>
 
+    <div class="">
+        <div class="row">
+            <div class="col-12 col-sm-8">
+                <%# YOGA %>
+
+                    <main hx-ext="sse" sse-connect="/events">
 
 
+                        <div class="yoga">
+                            <model-viewer id="human" src="/assets/man_12.gltf" animation-name="<%= initialPose.name %>"
+                                alt="human" shadow-intensity="1" auto-rotate disable-zoom touch-action="pan-y"
+                                environment-image="/assets/spruit_sunrise_1k_HDR.hdr" autoplay
+                                camera-orbit="-45deg 80deg 6m" camera-target="0m 0.5m 0m"
+                                animation-crossfade-duration="800"></model-viewer>
+
+                            <h1 class="title" sse-swap="pose" data-pose="<%= JSON.stringify(initialPose) %>">
+                                <%= initialPose.displayName %>
+                            </h1>
+                        </div>
+                    </main>
+
+            </div>
+            <div class="col-12 col-md-4">
+                <%# OPTIONS %>
 
 
-    <main hx-ext="sse" sse-connect="/events">
+                    <div class="p-4 text-body-secondary">
+                        <p class="text-center">
+                            multiplayer.yoga
+                        </p>
+                    </div>
 
-        <!-- Place all tab buttons in one container -->
-        <div class="sidebar-tab-container">
-            <button class="tab-button" style="top: 20px" @click="$store.app.toggleTab('chat')">💬</button>
-            <button class="tab-button" style="top: 70px" @click="$store.app.toggleTab('settings')">⚙️</button>
-            <button class="tab-button" style="top: 120px" @click="$store.app.toggleTab('about')">🛈︎</button>
-            <button class="tab-button" style="top: 170px" @click="$store.app.toggleTab('author')">👨‍🏫</button>
+                    <%# Settings %>
+                        <div>
+
+                            <div class=""></div>
+                            <h2>Settings</h2>
+                            <div class="card p-3 mb-4 shadow-sm">
+                                <form>
+                                    <!-- TTS Enable -->
+                                    <div class="form-check mb-4">
+                                        <input class="form-check-input" type="checkbox" id="ttsEnabled"
+                                            x-model="$store.settings.ttsEnabled">
+                                        <label class="form-check-label fw-bold" for="ttsEnabled">TTS</label>
+                                    </div>
+
+                                    <!-- TTS Volume -->
+                                    <div class="mb-4" x-show="$store.settings.ttsEnabled">
+                                        <label for="ttsVolume" class="form-label">TTS Volume</label>
+                                        <input type="range" class="form-range" id="ttsVolume" min="0" max="1"
+                                            step="0.001" x-model="$store.settings.ttsVolume">
+                                    </div>
+
+                                    <!-- TTS Pose Counter -->
+                                    <div class="form-check mb-5" x-show="$store.settings.ttsEnabled">
+                                        <input class="form-check-input" type="checkbox" id="ttsCounter"
+                                            x-model="$store.settings.ttsCounter">
+                                        <label class="form-check-label" for="ttsCounter">TTS Pose Counter</label>
+                                    </div>
+
+                                    <!-- Music Enable -->
+                                    <div class="form-check mb-4">
+                                        <input class="form-check-input" type="checkbox" id="bgmEnabled"
+                                            x-model="$store.settings.bgmEnabled" @input.debounce="adjustBgm">
+                                        <label class="form-check-label fw-bold" for="bgmEnabled">Music</label>
+                                    </div>
+
+                                    <!-- Music Volume -->
+                                    <div class="mb-4" x-show="$store.settings.bgmEnabled">
+                                        <label for="bgmVolume" class="form-label">Music Volume</label>
+                                        <input type="range" class="form-range" id="bgmVolume" min="0" max="1"
+                                            step="0.01" x-model="$store.settings.bgmVolume" @input.debounce="adjustBgm">
+                                    </div>
+                                </form>
+                            </div>
+
+
+                        </div>
+            </div>
         </div>
 
 
-        <!-- Sidebar Panels -->
+        <div class="row text-center">
+            <div class="container">
+
+                <hr>
+                <%# About %>
+                    <div class="container">
+                        <h1 class="mt-5">About</h1>
+                        <p>multiplayer.yoga is a worldwide yoga experience.</p>
+
+                        <p>Each pose lasts 42 seconds. All visitors see the same pose at the same time.
+                        </p>
+
+                        <p>There is no beginning, there is no end. Join any time and find your flow.</p>
+
+                        <!-- <p>The live chat fosters connection. There are no logins, no usernames, no reputation to
+                build. The focus
+                here is presense. Share your positive thoughts, loving kindness, and
+                encouragement to other yogis.</p> -->
+
+                        <p>Poses are selected using a weighted random. The idea here is to provide a flow with
+                            transitions that feel natural.</p>
+
+                        <p>No streaks, no scores, no leaderboards. This isn't a game or a race, it's a space to build
+                            focus, grow
+                            stronger, and find calm.</p>
+                    </div>
+
+                    <div class="container">
+                    <h1>Credits</h1>
+                    <p>Music created by <a class="temphuibis" target="_blank"
+                            href="https://linktr.ee/TEMPHUiBIS">TEMPHUiBIS</a></p>
+                            </div>
+
+                    <%# Author Panel %>
+                        <div class="container mb-5">
+                            <h1>Author</h1>
+                            <p>Hi I'm <a target="_blank" href="https://grimtech.net">Chris Grimmett</a>, author of
+                                multiplayer.yoga.
+                                <img class="img-fluid" alt="Chris Grimmett, author of multiplayer.yoga"
+                                    src="/assets/chris2.jpg">
+                            </p>
+
+                            <p>My dream is to support myself through building apps and websites that help people in
+                                their daily lives.
+                            </p>
+
+                            <p>Feel free to send me an <a href="mailto:chris@grimtech.net">E-mail</a> if you have any
+                                ideas or feedback.
+                            </p>
+
+                            <p>If you've found value here and want to support its continued growth, you can <a
+                                    href="https://buymeacoffee.com/cgrimmett">buy me a coffee</a>. Every little bit
+                                helps and is deeply
+                                appreciated.</p>
+
+                            <p>Thank you for being here.</p>
+
+
+
+
+                        </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+
+
+
+
+
+
+
+
 
         <%# Chat Panel %>
-        <div class="sidebar-panel" :class="{ 'active': $store.app.activeTab === 'chat' }">
+            <!--<div>
 
 
             <div class="logo-spacer"></div>
-
+ 
             <h2>Chat</h2>
             <div id="messages" sse-swap="message" hx-swap="beforeend">
             </div>
@@ -300,91 +241,8 @@
                 hx-on::after-request="if(event.detail.successful) { this.reset() } else { alert('There was a problem submitting your message. Please try again.');    }">
                 <input type="text" name="content" placeholder="Type a message..." required autocomplete="off" />
                 <button class="btn" type="submit">Send</button>
-            </form>
-        </div>
-
-        <%# Settings Panel %>
-        <div class="sidebar-panel" :class="{ 'active': $store.app.activeTab === 'settings' }">
-
-            <div class="logo-spacer"></div>
-            <h2>Settings</h2>
-            <form>
-                <label>
-                    TTS Enabled
-                    <input class="spaced" type="checkbox" x-model="$store.settings.ttsEnabled">
-                </label>
-
-                <label x-show="$store.settings.ttsEnabled">
-                    TTS Volume
-                    <input class="spaced" type="range" min="0" max="1" step="0.001" x-model="$store.settings.ttsVolume">
-                </label>
-
-                <label x-show="$store.settings.ttsEnabled">
-                    TTS Pose counter
-                    <input class="spaced" type="checkbox" x-model="$store.settings.ttsCounter">
-                </label>
-
-                <%# BGM section is disabled while we are waiting for TEMPHUiBIS to get back to us
-                <label>
-                    BGM Enabled
-                    <input class="spaced" type="checkbox" x-model="$store.settings.bgmEnabled">
-                </label>
-
-                <label x-show="$store.settings.bgmEnabled">
-                    BGM Volume
-                    <input class="spaced" type="range" min="0" max="1" step="0.01" x-model="$store.settings.bgmVolume">
-                </label>
-                %>
-
-
-
-            </form>
-        </div>
-
-        <%# About Panel %>
-        <div class="sidebar-panel" :class="{ 'active': $store.app.activeTab === 'about' }">
-            <h1>About</h1>
-            <p>multiplayer.yoga is a worldwide yoga experience.</p>
-
-            <p>Each pose lasts 42 seconds. The same pose is shown to everyone.
-            </p>
-
-            <p>There is no beginning, there is no end. Join any time and find your flow.</p>
-
-            <p>The live chat fosters connection. There are no logins, no usernames, no reputation to
-                build. The focus
-                here is presense, not vanity. Share your positive thoughts, loving kindness, and
-                encouragement to other yogis.</p>
-
-            <p>Poses are selected using a <a target="_blank" href="https://en.wikipedia.org/wiki/Markov_chain">Markov
-                    Chain</a>, a probabalistic way of selecting the next action based on the current action. The idea
-                here
-                is to generate a flow with transitions that feel natural.</p>
-
-            <p>No streaks, no scores, no leaderboards. This isn't a game or a race, it's a space to build focus, grow
-                stronger, and find calm.</p>
-        </div>
-
-        <%# Author Panel %>
-        <div class="sidebar-panel" :class="{ 'active': $store.app.activeTab === 'author' }">
-            <h1>Author</h1>
-            <p>Hi I'm <a target="_blank" href="https://grimtech.net">Chris Grimmett</a>, author of multiplayer.yoga.
-                <img src="/assets/chris2.jpg">
-            </p>
-
-            <p>My dream is to support myself through building apps and websites that help people in their daily lives.
-            </p>
-
-            <p>Feel free to send me an <a href="mailto:chris@grimtech.net">E-mail</a> if you have any ideas or feedback.
-            </p>
-
-            <p>If you've found value here and want to support its continued growth, you can <a
-                    href="https://buymeacoffee.com/cgrimmett">buy me a coffee</a>. Every little bit helps and is deeply
-                appreciated.</p>
-
-
-            <p>Thank you for being here.</p>
-        </div>
+            </form> 
+        </div>-->
 
 
 
@@ -395,17 +253,51 @@
 
 
 
-        <model-viewer id="human" src="/assets/man_12.gltf" animation-name="<%= initialPose.name %>" alt="human"
-            shadow-intensity="1" auto-rotate disable-zoom touch-action="pan-y"
-            environment-image="/assets/spruit_sunrise_1k_HDR.hdr" autoplay camera-orbit="-45deg 80deg 6m"
-            camera-target="0m 0.5m 0m" animation-crossfade-duration="800" touch-action="pan-y"></model-viewer>
-
-        <h1 class="title" sse-swap="pose" data-pose="<%= JSON.stringify(initialPose) %>"><%= initialPose.displayName %>
-        </h1>
 
 
-    </main>
 
+    </div>
+
+    <script src="/assets/howler.js"></script>
+    <script>
+
+        function adjustBgm() {
+            const settings = Alpine.store('settings');
+            const { bgmVolume, bgmEnabled } = settings;
+            let howl = settings.howl;
+
+            if (!howl) {
+                howl = new Howl({
+                    src: ['/assets/TEMPHUiBIS - Dreamy Yoga.mp3'],
+                    loop: true,
+                    html5: true,
+                    volume: settings.bgmVolume
+                });
+                settings.howl = howl; // <-- persist it
+            }
+
+            const isPlaying = howl.playing()
+
+
+            if (bgmEnabled) {
+                howl.volume(settings.bgmVolume);
+
+                if (!isPlaying) {
+                    howl.play();
+                }
+            } else {
+                if (howl.playing()) {
+                    howl.stop();
+                }
+            }
+
+            howl.volume(bgmVolume);
+
+        }
+
+
+
+    </script>
 
     <script>
         // function updateAnimation(name) {
@@ -424,8 +316,8 @@
         document.body.addEventListener('htmx:sseMessage', function (e) {
 
 
-            // logger.info('sseMessage has fired with e.detail.data as follows')
-            // logger.info(e.detail.data) // => <div class="pose" data-pose="{" name":"mountain","displayName":"Mountain
+            //logger.info('sseMessage has fired with e.detail.data as follows')
+            //logger.info(e.detail.data) // => <div class="pose" data-pose="{" name":"mountain","displayName":"Mountain
             // Pose","difficulty":1}>Mountain Pose</div>
 
             const elt = e.detail.elt
@@ -467,6 +359,10 @@
 
 
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
 
 </body>
 

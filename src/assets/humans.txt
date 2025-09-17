@@ -3,13 +3,13 @@ multiplayer.yoga, A Global Yoga Experience
 /* TEAM */
 
 Developer: Chris Scott Grimmett
-Site: https://flow.world
+Site: https://multiplayer.yoga
 Role: Creator, Developer, Designer, Dreamer
 
-Ambient Music: TEMPHUiBIS
+Music: TEMPHUiBIS
 Role: Composer
 Style: Retro-futuristic nature-inspired
-Notes: Temph crafted calming low-BPM ambient music designed to help visitors breathe, stretch, and connect. No rush, just vibes.
+Notes: Temph crafted calming ambient music designed to help visitors breathe, stretch, and connect. No rush, just vibes.
 
 
 /* CONCEPT */
@@ -33,9 +33,8 @@ Come as you are.
 Started with daily stretches in 2019.
 Inspired by YouTube yoga, but craving connection.
 Too shy for in-person classes, so I made my own global one.
-This is the middle ground.
 
 /* CREDITS */
 
-To TEMPHUiBIS – for saying yes and bringing flow to life.
-To the people breathing right now while reading this – thanks for showing up.
+To TEMPHUiBIS, for saying yes and bringing flow to life.
+To the people breathing right now while reading this, thanks for showing up.
