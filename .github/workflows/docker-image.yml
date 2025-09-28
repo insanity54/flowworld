@@ -17,12 +17,13 @@ jobs:
     - name: Code checkout
       uses: actions/checkout@v4
     -
-      name: Login to Docker Hub
+      name: Login to GHCR
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+
     -
       name: Set up QEMU
       uses: docker/setup-qemu-action@v3
@@ -34,4 +35,5 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         push: true
-        tags: insanity54/flowworld:latest
+        tags: ghcr.io/insanity54/flowworld:latest
+        platforms: linux/amd64
