@@ -2,7 +2,7 @@
 services:
 
   app:
-    build: .
+    image: ghcr.io/insanity54/flowworld:latest
     container_name: app
     env_file: .env
     depends_on:
