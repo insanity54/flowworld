@@ -3,8 +3,12 @@ services:
 
   app:
     image: ghcr.io/insanity54/flowworld:latest
-    container_name: app
     env_file: .env
+    ports:
+      - target: 5000 # container port
+        published: 9090 # Swarm ingress port
+        protocol: tcp
+        mode: ingress
     depends_on:
       - db
     entrypoint: npm run start
@@ -12,7 +16,6 @@ services:
 
   db:
     image: postgres:16
-    container_name: db
     restart: unless-stopped
     env_file: .env
     volumes:
