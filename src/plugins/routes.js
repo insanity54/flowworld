@@ -108,4 +108,8 @@ export default async function routes(fastify) {
         reply.sse(eventHub.getAsyncIterator());
     });
 
+    fastify.get('/health', (request, reply) => {
+        reply.send('OK');
+    });
+
 }
