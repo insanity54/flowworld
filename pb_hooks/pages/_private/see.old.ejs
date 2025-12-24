@@ -1,0 +1,43 @@
+ // SSE helpers
+  document.body.addEventListener('htmx:sseMessage', function(e) {
+
+
+    //logger.info('sseMessage has fired with e.detail.data as follows')
+    //logger.info(e.detail.data) // => <div class="pose" data-pose="{" name":"mountain","displayName":"Mountain
+    // Pose","difficulty":1}>Mountain Pose</div>
+
+    const elt = e.detail.elt
+    const el = elt.children[0]
+
+
+    if (!el || !el.dataset.pose) {
+      // the el might be a chat message so we dont handle it further
+      return
+    }
+
+    let pose;
+    try {
+      // logger.info(el.dataset.pose)
+      pose = JSON.parse(el.dataset.pose);
+    } catch (err) {
+      throw new Error(`Invalid JSON in data-pose. err=${err}`);
+    }
+
+    const vol = Number(Alpine.store('settings').ttsVolume);
+    const count = Alpine.store('settings').ttsCounter ? Alpine.store('app').incrPoseCount() : 0
+    const text = Alpine.store('settings').ttsCounter ? `${Alpine.store('app').poseCount} ${pose.displayName}` : pose.displayName
+
+    // Check Alpine settings before speaking
+    if (Alpine.store('settings').ttsEnabled) {
+      EasySpeech.speak({
+        text,
+        pitch: 1,
+        rate: 0.8,
+        volume: vol,
+        boundary: e => console.debug('boundary reached')
+      });
+    }
+
+    const modelViewer = document.querySelector('#human')
+    modelViewer.animationName = pose.name;
+  })

@@ -1,0 +1,23 @@
+<%# pages/api/pose.ejs %>
+<script server>
+  const { pose } = body()
+  console.log(`pose retrieved from request:${JSON.stringify(pose)} `)
+
+  // const pose = {
+  //   name: 'downDog',
+  //   displayName: 'Down Dog',
+  // }
+  const data = {
+    model: '/man_12.gltf',
+    environment: '/spruit_sunrise_1k_HDR.hdr',
+    pose,
+    // variations
+  }
+
+  
+  // api.datastar.dispatchCustomEvent('speech', data.pose.displayName)
+  api.datastar.realtime.patchElements(include('yoga-pose.ejs', data))
+
+  api.datastar.realtime.patchSignals(JSON.stringify(data));
+
+</script>

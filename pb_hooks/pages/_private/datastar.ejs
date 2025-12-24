@@ -1,0 +1,59 @@
+
+
+
+<%# @see https://pocketpages.dev/docs/plugins/datastar %>
+<%# we are avoiding the use of pocketpage's datastar ejs helper `datastar.scripts()` and instead copy pasting it's output %>
+<%# we avoid the helper because it doesn't play nicely when we use an import map, a necessity to useing https://github.com/ndendic/data-persist %>
+
+
+<script language="javascript">
+  const patchSignals = (signals) => {
+    document.dispatchEvent(
+      new CustomEvent('datastar-fetch', {
+        detail: {
+          type: 'datastar-patch-signals',
+          el: null,
+          argsRaw: {
+            signals: JSON.stringify(signals),
+          },
+        },
+      })
+    )
+  }
+</script>
+
+<script>
+  {
+    const source = new EventSource('/api/realtime') // URL to your SSE endpoint
+    source.addEventListener('PB_CONNECT', function (event) {
+      const e = JSON.parse(event.data)
+      // console.log('PB_CONNECT event:', e)
+      const { clientId } = e
+      fetch(`/api/realtime`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          clientId,
+          subscriptions: ['datastar'],
+        }),
+      }).catch(console.error)
+
+      patchSignals({ clientId })
+    })
+
+    source.addEventListener('datastar', function (event) {
+      const e = JSON.parse(event.data)
+      // console.log('datastar event:', e)
+      document.dispatchEvent(
+        new CustomEvent('datastar-fetch', {
+          detail: e,
+        })
+      )
+    })
+  }
+</script>
+
+
+<script type="module" src="/datastar-persist/index.js"></script>

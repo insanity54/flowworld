@@ -1,0 +1,251 @@
+<div class="yoga">
+  <div class="row">
+    <div class="col-12 col-sm-8">
+
+      <main>
+        <%- include('yoga-pose.ejs', { model: '/man_12.gltf', environment: '/spruit_sunrise_1k_HDR.hdr', pose: { name: 'seated', displayName: 'Seated'} }) %>
+      </main>
+
+    </div>
+    <div class="col-12 col-md-4">
+
+      <div data-signals:pose="{}"></div>
+
+
+      <div class="p-4 text-body-secondary">
+        <p id="title" class="text-center">
+          multiplayer.yoga
+        </p>
+      </div>
+
+
+      <%# Settings %>
+      <div>
+
+        <h2>Settings</h2>
+
+        <div class="card p-3 mb-4 shadow-sm">
+          <form>
+            <%# Difficulty %>
+            <div class="mb-4">
+              <label for="difficulty" class="form-label">Difficulty</label>
+              <select class="form-select" id="difficulty" data-bind="yoga.difficulty" data-persist="yoga.difficulty">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+                <option value="expert">Expert</option>
+              </select>
+            </div>
+
+            <%# Voice Enable %>
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" id="voiceEnabled" data-bind="voice.enabled" data-persist="voice.enabled" data-effect="$voice.enabled && !!$pose.name && window.howler.voice.play($pose.name)">
+              <label class="form-check-label fw-bold" for="voiceEnabled">Voice Prompts</label>
+            </div>
+
+            <%# Voice Volume %>
+            <div class="mb-4" data-show="$voice.enabled">
+              <label for="voiceVolume" class="form-label">Voice Volume</label>
+              <input type="range" class="form-range" id="voiceVolume" min="0.01" max="1" step="0.01" data-bind="voice.volume" data-persist="voice.volume" data-effect="window.howler.voice.volume($voice.volume)">
+            </div>
+
+            <%# Pose Counter %>
+            <div class="form-check mb-5" data-show="$voice.enabled">
+              <input class="form-check-input" type="checkbox" id="voiceCounter" data-bind="voice.counter">
+              <label class="form-check-label" for="voiceCounter">Pose Counter</label>
+            </div>
+
+            <%# Music Enable %>
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" id="bgmEnabled" data-bind="music.enabled" data-effect="$music.enabled ? window.howler.music.play() : window.howler.music.stop()">
+              <label class="form-check-label fw-bold" for="bgmEnabled">Music</label>
+            </div>
+
+            <%# Music Volume %>
+            <div class="mb-4" data-show="$music.enabled">
+              <label for="bgmVolume" class="form-label">Music Volume</label>
+              <input type="range" class="form-range" id="bgmVolume" min="0.01" max="1" step="0.01" data-bind="music.volume" data-persist="music.volume" data-effect="window.howler.music.volume($music.volume)">
+            </div>
+
+
+
+
+          </form>
+        </div>
+
+
+      </div>
+
+      <%# Personalization %>
+      <div data-show="$membership.enabled">
+        <h2>Personalization</h2>
+        <div class="card p-3 mb-4 shadow-sm">
+
+          <div class="mb-4">
+            <h3>Color</h3>
+            <input type="radio" class="btn-check" name="colorOptions" id="colorGreen" autocomplete="off" checked>
+            <label class="btn btn-secondary" for="colorGreen">Green</label>
+
+            <input type="radio" class="btn-check" name="colorOptions" id="colorBlue" autocomplete="off">
+            <label class="btn btn-secondary" for="colorBlue">Blue</label>
+
+            <input type="radio" class="btn-check" name="colorOptions" id="colorMagenta" autocomplete="off">
+            <label class="btn btn-secondary" for="colorMagenta">Magenta</label>
+
+            <input type="radio" class="btn-check" name="colorOptions" id="colorYellow" autocomplete="off">
+            <label class="btn btn-secondary" for="colorYellow">Yellow</label>
+          </div>
+
+          <div class="mb-4">
+            <h3>Hat</h3>
+            <input type="radio" class="btn-check" name="hatOptions" id="hatTop" autocomplete="off" checked>
+            <label class="btn btn-secondary" for="hatTop">Top</label>
+
+            <input type="radio" class="btn-check" name="hatOptions" id="hatCoonSkin" autocomplete="off">
+            <label class="btn btn-secondary" for="hatCoonSkin">Coon skin</label>
+
+            <input type="radio" class="btn-check" name="hatOptions" id="hatRainbow" autocomplete="off">
+            <label class="btn btn-secondary" for="hatRainbow">Rainbow</label>
+
+            <input type="radio" class="btn-check" name="hatOptions" id="hatBeer" autocomplete="off">
+            <label class="btn btn-secondary" for="hatBeer">Beer</label>
+          </div>
+
+          <div class="mb-4">
+            <h3>Belt</h3>
+            <input type="radio" class="btn-check" name="beltOptions" id="beltHitop" autocomplete="off" checked>
+            <label class="btn btn-secondary" for="beltHitop">Cowboy</label>
+
+            <input type="radio" class="btn-check" name="beltOptions" id="beltCombat" autocomplete="off">
+            <label class="btn btn-secondary" for="beltCombat">Canvas</label>
+
+            <input type="radio" class="btn-check" name="beltOptions" id="beltBigfoot" autocomplete="off">
+            <label class="btn btn-secondary" for="beltBigfoot">Woven</label>
+
+            <input type="radio" class="btn-check" name="beltOptions" id="beltHeel" autocomplete="off">
+            <label class="btn btn-secondary" for="beltHeel">Pink</label>
+          </div>
+
+          <div class="mb-4">
+            <h3>Wristband</h3>
+            <input type="radio" class="btn-check" name="wristbandOptions" id="wristbandBead" autocomplete="off" checked>
+            <label class="btn btn-secondary" for="wristbandBead">Bead</label>
+
+            <input type="radio" class="btn-check" name="wristbandOptions" id="wristbandChain" autocomplete="off">
+            <label class="btn btn-secondary" for="wristbandChain">Chain</label>
+
+            <input type="radio" class="btn-check" name="wristbandOptions" id="wristbandSilicone" autocomplete="off">
+            <label class="btn btn-secondary" for="wristbandSilicone">Silicone</label>
+
+            <input type="radio" class="btn-check" name="wristbandOptions" id="wristbandEvent" autocomplete="off">
+            <label class="btn btn-secondary" for="wristbandEvent">Event</label>
+          </div>
+
+        </div>
+      </div>
+
+      <%# Membership %>
+      <div data-show="!$membership.enabled">
+
+        <h2>Membership</h2>
+        <div class="card p-3 mb-4 shadow-sm">
+          <p class="text-info"><i>Support ongoing development and gain fun perks!</i></p>
+
+          <h3>Perks</h3>
+          <ul>
+            <li>Avatar personalization</li>
+            <li>All cosmetics unlocked</li>
+            <li>No ads</li>
+          </ul>
+
+          <p><b>NAME YOUR PRICE!</b> Make a one-time payment and become a member for the lifetime of your Browser's local storage.</p>
+
+          <p>@TODO add BOLT12 QR Code</p>
+
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+  <% if (env('NODE_ENV') === 'development') { %>
+  <div class="">
+    <h2>Debug data</h2>
+    <p><i>This section is only visible in development environment</i></p>
+    <%# Membership enabled (development feature) %>
+    <div class="mb-4">
+      <label for="membership" class="form-label">Membership Enabled</label>
+      <input type="checkbox" id="membership" data-bind="membership.enabled" data-persist="membership.enabled">
+    </div>
+    <pre><code data-json-signals></code></pre>
+
+
+  </div>
+  <% } %>
+
+  <div class="row text-center">
+    <div class="container">
+
+
+
+      <hr>
+
+
+
+      <div class="container">
+        <h1 class="mt-5">About</h1>
+        <p>multiplayer.yoga is a worldwide yoga experience.</p>
+
+        <p>Each pose lasts 42 seconds. All visitors see the same pose at the same time.
+        </p>
+
+        <p>There is no beginning, there is no end. Join any time and find your flow.</p>
+
+        <p>There are no logins, no usernames, no reputation to
+          build. The focus
+          here is presense.</p>
+
+        <p>Poses are chosen randomly with weighted probabilities, guiding the flow toward transitions that feel natural.</p>
+
+        <p>No streaks, no scores, no leaderboards. This isn't a game or a race, it's a space to build
+          focus, grow
+          stronger, and find calm.</p>
+
+      </div>
+
+      <div class="container">
+        <h1>Credits</h1>
+        <p>Music created by <a class="temphuibis" target="_blank" href="https://linktr.ee/TEMPHUiBIS">TEMPHUiBIS</a></p>
+      </div>
+
+
+      <div class="container mb-5">
+        <h1>Author</h1>
+        <p>Hi I'm <a target="_blank" href="https://grimtech.net">Chris Grimmett</a>, author of
+          multiplayer.yoga.
+          <img class="img-fluid" alt="Chris Grimmett, author of multiplayer.yoga" src="/chris2.jpg">
+        </p>
+
+        <p>My dream is to support myself through building apps and websites that help people in
+          their daily lives.
+        </p>
+
+        <p>I use multiplayer.yoga in my daily practice and I will be updating it monthly until it's the perfect yoga companion. Feel free to send me an <a href="mailto:chris@grimtech.net">E-mail</a> if you have any
+          ideas or feedback.
+        </p>
+
+        <p>If you've found value here and want to support its continued growth, you can <a href="https://buymeacoffee.com/cgrimmett">buy me a coffee</a>. Every little bit
+          helps and is deeply
+          appreciated.</p>
+
+        <p>Thank you for being here.</p>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>

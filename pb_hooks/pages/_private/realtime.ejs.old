@@ -1,0 +1,10 @@
+<script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+<script>
+  const pb = new PocketBase("<%= env('ORIGIN') %>")
+
+  // Subscribe to realtime updates
+  pb.realtime.subscribe('ping', (data) => {
+    // console.log(JSON.stringify(data))
+    console.log('Received a ping update:', data)
+  })
+</script>

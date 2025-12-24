@@ -1,0 +1,40 @@
+
+<script src="/howler.js"></script>
+<script>
+  function adjustBgm() {
+    const settings = Alpine.store('settings');
+    const {
+      bgmVolume,
+      bgmEnabled
+    } = settings;
+    let howl = settings.howl;
+
+    if (!howl) {
+      howl = new Howl({
+        src: ['/TEMPHUiBIS - Dreamy Yoga.mp3'],
+        loop: true,
+        html5: true,
+        volume: settings.bgmVolume
+      });
+      settings.howl = howl; // <-- persist it
+    }
+
+    const isPlaying = howl.playing()
+
+
+    if (bgmEnabled) {
+      howl.volume(settings.bgmVolume);
+
+      if (!isPlaying) {
+        howl.play();
+      }
+    } else {
+      if (howl.playing()) {
+        howl.stop();
+      }
+    }
+
+    howl.volume(bgmVolume);
+
+  }
+</script>

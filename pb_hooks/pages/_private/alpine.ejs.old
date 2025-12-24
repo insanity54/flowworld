@@ -1,0 +1,27 @@
+    <!-- Alpine Init -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('app', {
+                activeTab: null,
+                poseCount: 0,
+                incrPoseCount() {
+                    this.poseCount += 1
+                },
+                toggleTab(tabName) {
+                    this.activeTab = this.activeTab === tabName ? null : tabName;
+                },
+            })
+            Alpine.store('settings', {
+                ttsEnabled: Alpine.$persist(true).using(sessionStorage),
+                ttsVolume: Alpine.$persist(0.1).using(sessionStorage),
+                ttsCounter: Alpine.$persist(false).using(sessionStorage),
+                bgmEnabled: Alpine.$persist(true).using(sessionStorage),
+                bgmVolume: Alpine.$persist(0.5).using(sessionStorage),
+                howl: null
+            });
+
+            adjustBgm()
+
+        });
+
+    </script>

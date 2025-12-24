@@ -1,0 +1,350 @@
+<%# @see https://github.com/ndendic/data-satellites/blob/master/DatastarPluginGuide.md %>
+
+
+<script type="module">
+  import {
+    load,
+    apply
+  } from 'https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js'
+
+
+  // Dynamic delay per call - needed for handlers with configurable throttling
+  export function createDynamicThrottle() {
+    let timeoutId = null;
+    let lastExecTime = 0;
+
+    return (func, delay = 150) => {
+      const currentTime = Date.now();
+      const timeSinceLastExec = currentTime - lastExecTime;
+
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+
+      if (timeSinceLastExec >= delay) {
+        func();
+        lastExecTime = currentTime;
+      } else {
+        const remainingDelay = delay - timeSinceLastExec;
+        timeoutId = setTimeout(() => {
+          func();
+          lastExecTime = Date.now();
+          timeoutId = null;
+        }, remainingDelay);
+      }
+    };
+  }
+
+  // RAF throttling syncs with display refresh rate for smooth animations
+  export function createRAFThrottle(func) {
+    let rafId = null;
+
+    return function(...args) {
+      if (rafId !== null) return;
+
+      rafId = requestAnimationFrame(() => {
+        try {
+          func.apply(this, args);
+        } finally {
+          // Prevent memory leak if func throws
+          rafId = null;
+        }
+      });
+    };
+  }
+
+  // Timer-based throttling for configurable delays
+  export function createTimerThrottle(func, delay) {
+    let timeoutId;
+    let lastExecTime = 0;
+
+    return function(...args) {
+      const currentTime = Date.now();
+
+      if (currentTime - lastExecTime > delay) {
+        func.apply(this, args);
+        lastExecTime = currentTime;
+      } else {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func.apply(this, args);
+          lastExecTime = Date.now();
+        }, delay - (currentTime - lastExecTime));
+      }
+    };
+  }
+
+  // WeakMap ensures throttle state is garbage collected with elements
+  export function createElementThrottle() {
+    const throttleConfigs = new WeakMap();
+
+    return (element, func, delay = 150) => {
+      let config = throttleConfigs.get(element);
+      if (!config) {
+        config = {
+          lastExec: 0,
+          timeoutId: null
+        };
+        throttleConfigs.set(element, config);
+      }
+
+      const now = Date.now();
+      const timeSinceLastExec = now - config.lastExec;
+
+      if (config.timeoutId) {
+        clearTimeout(config.timeoutId);
+        config.timeoutId = null;
+      }
+
+      if (timeSinceLastExec >= delay) {
+        config.lastExec = now;
+        return func.call(element);
+      }
+      const remainingDelay = delay - timeSinceLastExec;
+      config.timeoutId = setTimeout(() => {
+        config.lastExec = Date.now();
+        config.timeoutId = null;
+        func.call(element);
+      }, remainingDelay);
+    };
+  }
+
+  // Debouncing waits for events to stop - useful for search input, resize events
+  export function createDebounce(func, delay) {
+    let timeoutId = null;
+
+    return function(...args) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+
+      timeoutId = setTimeout(() => {
+        func.apply(this, args);
+        timeoutId = null;
+      }, delay);
+    };
+  }
+
+
+
+
+  const DEFAULT_STORAGE_KEY = "datastar";
+  const DEFAULT_THROTTLE = 500;
+
+  function getStorage(isSession) {
+    try {
+      const storage = isSession ? sessionStorage : localStorage;
+      const testKey = "__test__";
+      storage.setItem(testKey, "1");
+      storage.removeItem(testKey);
+      return storage;
+    } catch {
+      return null;
+    }
+  }
+
+  function parseConfig(ctx) {
+    const {
+      key,
+      value,
+      mods
+    } = ctx;
+
+    const isSession = mods.has("session");
+    const storage = getStorage(isSession);
+    if (!storage) return null;
+
+    // v1.0.0-RC.3+: Custom keys come as data-persist-mykey, so the key is in ctx.key
+    const storageKey = key ? `${DEFAULT_STORAGE_KEY}-${key}` : DEFAULT_STORAGE_KEY;
+
+    let signals = [];
+    let isWildcard = false;
+
+    // Parse value for signals to persist
+    const trimmedValue = value?.trim();
+    if (trimmedValue) {
+      // If value is provided and not empty, parse it as comma-separated signals
+      signals = trimmedValue
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    } else {
+      // No value (boolean attribute) or empty value means persist all signals
+      isWildcard = true;
+    }
+
+    return {
+      storage,
+      storageKey,
+      signals,
+      isWildcard
+    };
+  }
+
+  function loadFromStorage(config, ctx) {
+    try {
+      const stored = config.storage.getItem(config.storageKey);
+      if (!stored) return;
+
+      console.log(`there is some storage data as folows.`)
+
+      const data = JSON.parse(stored);
+      if (!data || typeof data !== "object") return;
+
+      console.log(data)
+
+      ctx.startBatch();
+      try {
+        if (config.isWildcard) {
+          ctx.mergePatch(data);
+        } else {
+          const patch = Object.fromEntries(
+            config.signals.filter((signal) => signal in data).map((signal) => [signal, data[signal]])
+          );
+
+          console.log(`patch as follows ${JSON.stringify(patch)}`)
+
+          if (Object.keys(patch).length > 0) {
+            ctx.mergePatch(patch);
+          }
+        }
+      } finally {
+        ctx.endBatch();
+      }
+    } catch {
+      // Storage errors are expected in some environments
+    }
+  }
+
+  function getSignalsFromElement(el) {
+    const signals = [];
+
+    // Scan all attributes for data-signals-* pattern
+    for (const attr of el.attributes) {
+      if (attr.name.startsWith("data-signals-")) {
+        // Extract signal name from attribute name: data-signals-mySignal -> mySignal
+        const signalName = attr.name.substring("data-signals-".length);
+        if (signalName) {
+          signals.push(signalName);
+        }
+      }
+    }
+
+    return signals;
+  }
+
+  function saveToStorage(
+    config,
+    _ctx,
+    signalData
+  ) {
+    try {
+      const stored = config.storage.getItem(config.storageKey);
+      const existing = stored ? JSON.parse(stored) : {};
+      const merged = {
+        ...existing,
+        ...signalData
+      };
+
+      if (Object.keys(merged).length > 0) {
+        config.storage.setItem(config.storageKey, JSON.stringify(merged));
+      }
+    } catch {
+      console.log('storage error or something ')
+      // Storage quota exceeded or other storage errors
+    }
+  }
+
+  const persistAttributePlugin = {
+    type: "attribute",
+    name: "persist",
+    keyReq: "allowed",
+    valReq: "allowed",
+    shouldEvaluate: false,
+
+    onLoad(ctx) {
+      const config = parseConfig(ctx);
+      if (!config) return;
+
+      console.log(`config as follows ${JSON.stringify(config)}`)
+
+      loadFromStorage(config, ctx);
+
+      const throttleMs = ctx.mods.has("immediate") ?
+        0 :
+        Number.parseInt(String(ctx.mods.get("throttle") ?? DEFAULT_THROTTLE));
+
+      let cachedSignalData = {};
+
+      const persistData = () => {
+        if (Object.keys(cachedSignalData).length > 0) {
+          console.log(`some cachedSignalData is present so we are saving it to storage. ${JSON.stringify(cachedSignalData)}`)
+          saveToStorage(config, ctx, cachedSignalData);
+        }
+      };
+
+      const throttledPersist = throttleMs > 0 ? createDebounce(persistData, throttleMs) : persistData;
+
+      // Single-pass signal tracking with data collection
+      const cleanup = ctx.effect(() => {
+
+        
+
+        const signals = config.isWildcard ? getSignalsFromElement(ctx.el) : config.signals;
+
+
+        const data = {};
+
+        // Single pass: create dependencies and collect values
+        for (const signal of signals) {
+          try {
+            data[signal] = ctx.getPath(signal);
+            console.log(`setting data[signal] signal=${signal} to ${ctx.getPath(signal)}`)
+          } catch {
+            // Signal doesn't exist, skip it
+          }
+        }
+
+        cachedSignalData = data;
+        throttledPersist();
+      });
+
+      return cleanup;
+    },
+  };
+
+
+
+  const alertPlugin = {
+    type: 'attribute',
+    name: 'alert',
+    keyReq: 'denied',
+    valReq: 'must',
+    onLoad: ({
+      el,
+      effect,
+      rx,
+      runtimeErr,
+      value
+    }) => {
+
+      const showAlert = () => {
+        const alertMessage = value.replace(/['"]/g, ''); // Remove quotes from attribute value
+        alert(alertMessage);
+      };
+
+      el.addEventListener('click', showAlert);
+
+    },
+  }
+
+
+  // setTimeout(() => {
+    // load(persistAttributePlugin)
+    // apply()
+  // }, 5000)
+
+
+</script>

@@ -1,0 +1,17 @@
+<div id="yoga-pose">
+  <model-viewer 
+    id="human" 
+    src="<%= model %>" 
+    animation-name="<%= pose.name %>" 
+    alt="human" 
+    shadow-intensity="1" 
+    auto-rotate disable-zoom touch-action="pan-y" 
+    environment-image="<%= environment %>" 
+    autoplay camera-orbit="-45deg 80deg 6m" 
+    camera-target="0m 0.5m 0m" 
+    animation-crossfade-duration="800"></model-viewer>
+
+  <h1 class="title">
+    <%= pose.displayName %>
+  </h1>
+</div>

@@ -1,0 +1,609 @@
+<%# we autoplay this empty mp3 to create the autoplay permission request. idk why Howler doesn't do this by itself %>
+<%# this is a workaround for @see https://github.com/goldfire/howler.js/issues/1294 %>
+<audio src="void.mp3" autoplay></audio>
+
+<script type="module">
+  import {
+    Howl,
+    Howler
+  } from 'https://cdn.jsdelivr.net/npm/howler@2.2.4/+esm';
+
+    const sprite = {
+    "headToKneeR": [
+      0,
+      1080
+    ],
+    "headToKneeL": [
+      1090,
+      1210
+    ],
+    "sphinx": [
+      2300,
+      751
+    ],
+    "bridge": [
+      3051,
+      689
+    ],
+    "runnersLungeL": [
+      3740,
+      1599
+    ],
+    "runnersLungeR": [
+      5338,
+      1506
+    ],
+    "kneesToChest": [
+      6844,
+      1539
+    ],
+    "staff": [
+      8383,
+      959
+    ],
+    "happyBaby": [
+      9344,
+      1190
+    ],
+    "corpse": [
+      10534,
+      850
+    ],
+    "pigeonR": [
+      11384,
+      959
+    ],
+    "pigeonL": [
+      12343,
+      1066
+    ],
+    "lizardL": [
+      13409,
+      1151
+    ],
+    "lizardR": [
+      14560,
+      1050
+    ],
+    "cobra": [
+      15610,
+      619
+    ],
+    "upDog": [
+      16229,
+      859
+    ],
+    "seated": [
+      17088,
+      822
+    ],
+    "seatedForwardFold": [
+      17910,
+      1447
+    ],
+    "warriorOneR": [
+      19356,
+      1494
+    ],
+    "warriorOneL": [
+      20850,
+      1375
+    ],
+    "threeLeggedDogR": [
+      22226,
+      1590
+    ],
+    "threeLeggedDogL": [
+      23815,
+      1832
+    ],
+    "downDog": [
+      25647,
+      960
+    ],
+    "catCow": [
+      26608,
+      1308
+    ],
+    "halfwayLift": [
+      27915,
+      1466
+    ],
+    "wildThingL": [
+      29381,
+      1308
+    ],
+    "wildThingR": [
+      30689,
+      1530
+    ],
+    "supportedSidePlankL": [
+      32219,
+      2161
+    ],
+    "supportedSidePlankR": [
+      34380,
+      2050
+    ],
+    "sidePlankR": [
+      36430,
+      1332
+    ],
+    "sidePlankL": [
+      37762,
+      1605
+    ],
+    "plank": [
+      39367,
+      693
+    ],
+    "ragdoll": [
+      40060,
+      777
+    ],
+    "standingForwardFold": [
+      40837,
+      1826
+    ],
+    "mountain": [
+      42670,
+      693
+    ],
+    "count1": [
+      43363,
+      351
+    ],
+    "count2": [
+      43713,
+      322
+    ],
+    "count3": [
+      44043,
+      297
+    ],
+    "count4": [
+      44345,
+      300
+    ],
+    "count5": [
+      44653,
+      237
+    ],
+    "count6": [
+      44887,
+      451
+    ],
+    "count7": [
+      45341,
+      367
+    ],
+    "count8": [
+      45710,
+      280
+    ],
+    "count9": [
+      45980,
+      227
+    ],
+    "count10": [
+      46209,
+      250
+    ],
+    "count11": [
+      46459,
+      395
+    ],
+    "count12": [
+      46864,
+      290
+    ],
+    "count13": [
+      47155,
+      474
+    ],
+    "count14": [
+      47636,
+      543
+    ],
+    "count15": [
+      48189,
+      459
+    ],
+    "count16": [
+      48660,
+      560
+    ],
+    "count17": [
+      49228,
+      538
+    ],
+    "count18": [
+      49771,
+      436
+    ],
+    "count19": [
+      50212,
+      489
+    ],
+    "count20": [
+      50709,
+      392
+    ],
+    "count21": [
+      51109,
+      614
+    ],
+    "count22": [
+      51725,
+      606
+    ],
+    "count23": [
+      52342,
+      645
+    ],
+    "count24": [
+      52984,
+      667
+    ],
+    "count25": [
+      53659,
+      563
+    ],
+    "count26": [
+      54214,
+      780
+    ],
+    "count27": [
+      55001,
+      655
+    ],
+    "count28": [
+      55661,
+      576
+    ],
+    "count29": [
+      56234,
+      596
+    ],
+    "count30": [
+      56831,
+      265
+    ],
+    "count31": [
+      57096,
+      532
+    ],
+    "count32": [
+      57628,
+      482
+    ],
+    "count33": [
+      58109,
+      471
+    ],
+    "count34": [
+      58606,
+      512
+    ],
+    "count35": [
+      59126,
+      482
+    ],
+    "count36": [
+      59613,
+      685
+    ],
+    "count37": [
+      60302,
+      577
+    ],
+    "count38": [
+      60879,
+      531
+    ],
+    "count39": [
+      61417,
+      506
+    ],
+    "count40": [
+      61947,
+      294
+    ],
+    "count41": [
+      62234,
+      527
+    ],
+    "count42": [
+      62769,
+      552
+    ],
+    "count43": [
+      63317,
+      531
+    ],
+    "count44": [
+      63841,
+      556
+    ],
+    "count45": [
+      64393,
+      520
+    ],
+    "count46": [
+      64920,
+      732
+    ],
+    "count47": [
+      65652,
+      628
+    ],
+    "count48": [
+      66272,
+      531
+    ],
+    "count49": [
+      66799,
+      491
+    ],
+    "count50": [
+      67287,
+      333
+    ],
+    "count51": [
+      67617,
+      463
+    ],
+    "count52": [
+      68070,
+      505
+    ],
+    "count53": [
+      68569,
+      464
+    ],
+    "count54": [
+      69034,
+      545
+    ],
+    "count55": [
+      69574,
+      515
+    ],
+    "count56": [
+      70089,
+      707
+    ],
+    "count57": [
+      70790,
+      565
+    ],
+    "count58": [
+      71361,
+      525
+    ],
+    "count59": [
+      71880,
+      535
+    ],
+    "count60": [
+      72415,
+      368
+    ],
+    "count61": [
+      72779,
+      606
+    ],
+    "count62": [
+      73369,
+      656
+    ],
+    "count63": [
+      74016,
+      606
+    ],
+    "count64": [
+      74616,
+      722
+    ],
+    "count65": [
+      75323,
+      671
+    ],
+    "count66": [
+      75974,
+      924
+    ],
+    "count67": [
+      76877,
+      757
+    ],
+    "count68": [
+      77619,
+      707
+    ],
+    "count69": [
+      78316,
+      631
+    ],
+    "count70": [
+      78927,
+      409
+    ],
+    "count71": [
+      79305,
+      611
+    ],
+    "count72": [
+      79931,
+      586
+    ],
+    "count73": [
+      80522,
+      621
+    ],
+    "count74": [
+      81137,
+      656
+    ],
+    "count75": [
+      81789,
+      602
+    ],
+    "count76": [
+      82420,
+      814
+    ],
+    "count77": [
+      83227,
+      681
+    ],
+    "count78": [
+      83898,
+      641
+    ],
+    "count79": [
+      84577,
+      604
+    ],
+    "count80": [
+      85176,
+      250
+    ],
+    "count81": [
+      85423,
+      466
+    ],
+    "count82": [
+      85887,
+      507
+    ],
+    "count83": [
+      86391,
+      494
+    ],
+    "count84": [
+      86883,
+      510
+    ],
+    "count85": [
+      87392,
+      606
+    ],
+    "count86": [
+      87991,
+      718
+    ],
+    "count87": [
+      88704,
+      611
+    ],
+    "count88": [
+      89313,
+      543
+    ],
+    "count89": [
+      89858,
+      538
+    ],
+    "count90": [
+      90386,
+      385
+    ],
+    "count91": [
+      90765,
+      532
+    ],
+    "count92": [
+      91291,
+      699
+    ],
+    "count93": [
+      91976,
+      592
+    ],
+    "count94": [
+      92550,
+      653
+    ],
+    "count95": [
+      93199,
+      620
+    ],
+    "count96": [
+      93809,
+      825
+    ],
+    "count97": [
+      94619,
+      728
+    ],
+    "count98": [
+      95344,
+      656
+    ],
+    "count99": [
+      96003,
+      567
+    ],
+    "count100": [
+      96556,
+      581
+    ],
+    "greatJob": [
+      97126,
+      663
+    ],
+    "excellent": [
+      97800,
+      917
+    ],
+    "excellentJob": [
+      98718,
+      839
+    ],
+    "niceWork": [
+      99567,
+      971
+    ],
+    "youreDoingReallyGood": [
+      100546,
+      983
+    ],
+    "keepItUp": [
+      101558,
+      674
+    ],
+    "clap": [
+      102327,
+      2835
+    ],
+    "hyperClap": [
+      105389,
+      1357
+    ]
+  }
+
+
+
+  let voice = new Howl({
+    src: ['voice.ogg', 'voice.mp3'],
+    sprite,
+    autoUnlock: true,
+    autoplay: true
+  });
+
+  // Usage: voice.play('sidePlankR')
+
+  /** @type {typeof import("howler").Howl} */
+  let music = new Howl({
+    src: ['TEMPHUiBIS - Dreamy Yoga.mp3'],
+    loop: true,
+    autoUnlock: true,
+    autoplay: true,
+  });
+  window.howler = {
+    voice,
+    music,
+  }
+
+</script>

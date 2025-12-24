@@ -1,0 +1,106 @@
+<%# pages/api/ping.ejs %>
+
+<script server>
+
+const model = '/man_12.gltf';
+const environment = '/spruit_sunrise_1k_HDR.hdr';
+
+// List of poses
+const poses = [
+  { name: 'catCow', displayName: 'Cat Cow' },
+  { name: 'downDog', displayName: 'Downward Dog' },
+  { name: 'warriorOneL', displayName: 'Warrior One Left' },
+  { name: 'warriorOneR', displayName: 'Warrior One Right' },
+  { name: 'plank', displayName: 'Plank Pose' },
+  { name: 'bridge', displayName: 'Bridge Pose' },
+  { name: 'headToKneeL', displayName: 'Head to Knee Left' },
+  { name: 'headToKneeR', displayName: 'Head to Knee Right' },
+];
+
+// Randomly select a pose
+const randomIndex = Math.floor(Math.random() * poses.length);
+const pose = poses[randomIndex];
+
+const data = {
+  model,
+  environment,
+  pose
+};
+
+datastar.realtime.patchElements(include('yoga-pose.ejs', data));
+</script>
+
+
+
+
+func selectNextPose(app core.App) (*core.Record, error) {
+	// Retrieve a single "flows" record by the specified filter
+	records, err := app.FindRecordsByFilter(
+		"flows",
+		"channel = 'global42'", // Filter condition
+		"-created",             // Sort by 'created' in descending order
+		1,                      // Limit to 1 record
+		0,                      // Offset
+	)
+
+	// Check for errors
+	if err != nil {
+		return nil, err // Return nil and the error if something went wrong
+	}
+
+	// Expand the first record to include associated "pose_bundle"
+	if len(records) == 0 {
+		return nil, errors.New("there were no records found")
+	}
+
+	record := records[0]
+
+	// print the expanded records
+	// expand
+	errs := app.ExpandRecord(record, []string{"pose"}, nil)
+	if len(errs) > 0 {
+		return nil, fmt.Errorf("failed to expand: %v", errs)
+	}
+
+	pose := record.Get("expands")
+	log.Printf("here is the expands %v", record.Get("expands"))
+
+	return pose, nil // Return the record if successful
+	// Randomly choose a neighbor of the pose retrieved
+
+}
+/**
+ * @see https://pocketbase.io/docs/go-realtime/
+ */
+func notify(app core.App, subscription string, data any) error {
+	rawData, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	message := subscriptions.Message{
+		Name: subscription,
+		Data: rawData,
+	}
+
+	group := new(errgroup.Group)
+
+	chunks := app.SubscriptionsBroker().ChunkedClients(300)
+
+	for _, chunk := range chunks {
+		group.Go(func() error {
+			for _, client := range chunk {
+				if !client.HasSubscription(subscription) {
+					continue
+				}
+
+				client.Send(message)
+			}
+
+			return nil
+		})
+	}
+
+	return group.Wait()
+
+}
