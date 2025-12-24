@@ -8,7 +8,7 @@
     Howler
   } from 'https://cdn.jsdelivr.net/npm/howler@2.2.4/+esm';
 
-    const sprite = {
+  const sprite = {
     "headToKneeR": [
       0,
       1080
@@ -584,13 +584,33 @@
   }
 
 
+  let soundQueue = [];
+  let currentSound = null;
 
   let voice = new Howl({
     src: ['voice.ogg', 'voice.mp3'],
-    sprite,
+    sprite: sprite,
     autoUnlock: true,
-    autoplay: true
+    onend: function() {
+      // If there are more sounds in the queue, play the next one
+      if (soundQueue.length > 0) {
+        const nextSprite = soundQueue.shift();
+        queueSprite(voice, nextSprite);
+      }
+    }
   });
+
+  // Function to queue a Howler.js sound sprite
+  function queueSprite(howl, sprite) {
+    if (currentSound && howl.playing(currentSound)) {
+      // If a sound is currently playing, add the sprite to the queue
+      soundQueue.push(sprite);
+    } else {
+      // Play the sprite immediately
+      currentSound = sprite;
+      howl.play(currentSound);
+    }
+  }
 
   // Usage: voice.play('sidePlankR')
 
@@ -599,11 +619,12 @@
     src: ['TEMPHUiBIS - Dreamy Yoga.mp3'],
     loop: true,
     autoUnlock: true,
-    autoplay: true,
+    autoplay: false,
   });
   window.howler = {
     voice,
     music,
+    queueSprite,
+    soundQueue,
   }
-
 </script>

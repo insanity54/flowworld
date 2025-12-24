@@ -39,7 +39,19 @@
 
             <%# Voice Enable %>
             <div class="form-check mb-4">
-              <input class="form-check-input" type="checkbox" id="voiceEnabled" data-bind="voice.enabled" data-persist="voice.enabled" data-effect="$voice.enabled && !!$pose.name && window.howler.voice.play($pose.name)">
+              <input class="form-check-input" type="checkbox" id="voiceEnabled" 
+              data-bind="voice.enabled" 
+              data-persist="voice.enabled" 
+              data-effect="
+                $voice.enabled && $pose.name &&
+                (window.howler.voice ? (
+                  ($voice.counter 
+                    ? (window.howler.queueSprite(window.howler.voice, 'count' + @peek(() => $yoga.counter)), window.howler.queueSprite(window.howler.voice, $pose.name))
+                    : window.howler.queueSprite(window.howler.voice, $pose.name)
+                  )
+                ) : null)">
+
+            
               <label class="form-check-label fw-bold" for="voiceEnabled">Voice Prompts</label>
             </div>
 
@@ -50,14 +62,14 @@
             </div>
 
             <%# Pose Counter %>
-            <div class="form-check mb-5" data-show="$voice.enabled">
+            <div class="form-check mb-5" data-show="$voice.enabled" data-signals="{'yoga': {'counter': 1 }}" data-effect="$pose.name && @peek(() => $yoga.counter++) ">
               <input class="form-check-input" type="checkbox" id="voiceCounter" data-bind="voice.counter">
               <label class="form-check-label" for="voiceCounter">Pose Counter</label>
             </div>
 
             <%# Music Enable %>
             <div class="form-check mb-4">
-              <input class="form-check-input" type="checkbox" id="bgmEnabled" data-bind="music.enabled" data-effect="$music.enabled ? window.howler.music.play() : window.howler.music.stop()">
+              <input class="form-check-input" type="checkbox" id="bgmEnabled" data-bind="music.enabled" data-effect="window?.howler?.music && $music.enabled ? window.howler.music.play() : window.howler.music.stop()">
               <label class="form-check-label fw-bold" for="bgmEnabled">Music</label>
             </div>
 
@@ -151,7 +163,6 @@
         <div class="card p-3 mb-4 shadow-sm">
           <p class="text-info"><i>Support ongoing development and gain fun perks!</i></p>
 
-          <h3>Perks</h3>
           <ul>
             <li>Avatar personalization</li>
             <li>All cosmetics unlocked</li>

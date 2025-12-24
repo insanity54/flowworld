@@ -1,5 +1,8 @@
-<div id="yoga-pose">
+<div id="yoga-pose" data-signals:pose="{'displayName': 'Seated', 'name': 'seated'}">
   <model-viewer 
+    data-attr:animation-name="$pose.name"
+    data-attr:src="$model"
+    data-attr:environment-image="$environment"
     id="human" 
     src="<%= model %>" 
     animation-name="<%= pose.name %>" 
@@ -11,7 +14,7 @@
     camera-target="0m 0.5m 0m" 
     animation-crossfade-duration="800"></model-viewer>
 
-  <h1 class="title">
+  <h1 class="title" data-text="$pose.displayName">
     <%= pose.displayName %>
   </h1>
 </div>
