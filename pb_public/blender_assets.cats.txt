@@ -1,0 +1,11 @@
+# This is an Asset Catalog Definition file for Blender.
+#
+# Empty lines and lines starting with `#` will be ignored.
+# The first non-ignored line should be the version indicator.
+# Other lines are of the format "UUID:catalog/path/for/assets:simple catalog name"
+
+VERSION 1
+
+a26360a4-f9df-459d-b0ad-2253a764a931:Yoga:Yoga
+80303e7a-d568-4289-9f5d-70d36a4119dc:Yoga/Arms:Yoga-Arms
+f6c84873-8cfb-48e9-b203-4326aa181d78:Yoga/WholeBody:Yoga-WholeBody

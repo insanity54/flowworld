@@ -1,0 +1,144 @@
+<%# @see https://codepen.io/jasalt/pen/ByjGdze %>
+
+<h1>Three.js Game test</h1>
+<%# @see https://github.com/aereaco/datastar-components %>
+
+<style>
+  :host {
+    display: block;
+    width: 100%;
+    height: 500px;
+  }
+
+  canvas {
+    display: block;
+    background-color: #000;
+    width: 100%;
+  }
+</style>
+
+<canvas width="200" height="200" class="three-canvas" data-ref:canvas data-init="@initWebgl()" data-on:pointerdown__prevent="@joyWebglPointerDown()" ></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+<script type="module">
+  import { action, root, mergePatch } from 'datastar'
+
+  action({
+    name: 'initWebgl',
+    apply({
+      el
+    }) {
+      const canvas = el;
+
+      const gl = canvas.getContext('webgl', {
+        antialias: true,
+        premultipliedAlpha: false
+      });
+      if (!gl) {
+        console.warn('WebGL not available');
+        return;
+      }
+    }
+  })
+
+
+  let scene, camera, renderer, world;
+  let animationFrameId;
+
+  // componentInstance.contentReadyCallback = () => {
+
+  const canvas = document.querySelector('.three-canvas');
+  if (!canvas) {
+    console.error('Canvas element not found for 3D sim!');
+    // return;
+  }
+
+  // Adjust canvas size to parent container
+  const resizeCanvas = () => {
+    const parent = canvas.parentElement;
+    canvas.width = parent.clientWidth;
+    canvas.height = parent.clientHeight;
+    if (camera) {
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+    if (renderer) {
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    }
+  };
+  window.addEventListener('resize', resizeCanvas);
+  // componentInstance.registerCleanup(() => window.removeEventListener('resize', resizeCanvas));
+
+
+  // Basic Three.js Setup
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+  renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true
+  });
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  // Add some light
+  const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+  scene.add(ambientLight);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+  scene.add(directionalLight);
+
+  // Basic Physics Setup (Cannon.js)
+  world = new CANNON.World();
+  world.gravity.set(0, -9.82, 0); // m/s²
+
+  // Add a ground plane
+  const groundShape = new CANNON.Plane();
+  const groundBody = new CANNON.Body({
+    mass: 0
+  }); // mass = 0 makes it static
+  groundBody.addShape(groundShape);
+  groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2); // Rotate to be horizontal
+  world.addBody(groundBody);
+  const groundMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial({
+    color: 0x888888,
+    side: THREE.DoubleSide
+  }));
+  groundMesh.rotation.x = -Math.PI / 2;
+  scene.add(groundMesh);
+
+  // Add a simple box
+  const boxSize = 0.2;
+  const boxShape = new CANNON.Box(new CANNON.Vec3(boxSize, boxSize, boxSize));
+  const boxBody = new CANNON.Body({
+    mass: 0.5,
+    position: new CANNON.Vec3(0, 5, 0)
+  });
+  boxBody.addShape(boxShape);
+  world.addBody(boxBody);
+  const boxMesh = new THREE.Mesh(new THREE.BoxGeometry(boxSize * 2, boxSize * 2, boxSize * 2), new THREE.MeshLambertMaterial({
+    color: 0x00ff00
+  }));
+  scene.add(boxMesh);
+
+  camera.position.set(0, 2, 5);
+  camera.lookAt(0, 0, 0);
+
+  const animate = () => {
+    animationFrameId = requestAnimationFrame(animate);
+    world.step(1 / 60); // Update physics
+    boxMesh.position.copy(boxBody.position);
+    boxMesh.quaternion.copy(boxBody.quaternion);
+    renderer.render(scene, camera);
+  };
+  animate();
+  resizeCanvas(); // Initial canvas resize
+
+  // Cleanup Function for 3D resources
+  // componentInstance.registerCleanup(() => {
+  //   console.log('Cleaning up 3D Game Simulation...');
+  //   cancelAnimationFrame(animationFrameId);
+  //   renderer.dispose();
+  //   scene.clear();
+  //   world = null; // Clear physics world
+  //   console.log('3D Game Simulation cleaned up.');
+  // });
+  // };
+</script>

@@ -1,9 +1,25 @@
+
+
 <div class="yoga">
+
+
+  <script type="module">
+
+    window.setColor = (hexCode) => {
+      const modelViewer = document.querySelector('model-viewer')
+      if (!!modelViewer) {
+        modelViewer?.model?.materials[0].pbrMetallicRoughness.setBaseColorFactor(hexCode)
+      } else {
+        console.log('WHERE IS THE MODEL VEIWERQ!?!??')
+      }
+    }
+  </script>
+
   <div class="row">
     <div class="col-12 col-sm-8">
 
       <main>
-        <%- include('yoga-pose.ejs', { model: '/man_12.gltf', environment: '/spruit_sunrise_1k_HDR.hdr', pose: { name: 'seated', displayName: 'Seated'} }) %>
+        <%- include('yoga-pose.ejs', { model: '/human2.glb', environment: '/spruit_sunrise_1k_HDR.hdr', pose: { name: 'seated', displayName: 'Seated'} }) %>
       </main>
 
     </div>
@@ -44,7 +60,7 @@
               data-persist="voice.enabled" 
               data-effect="
                 $voice.enabled && $pose.name &&
-                (window.howler.voice ? (
+                (window?.howler?.voice ? (
                   ($voice.counter 
                     ? (window.howler.queueSprite(window.howler.voice, 'count' + @peek(() => $yoga.counter)), window.howler.queueSprite(window.howler.voice, $pose.name))
                     : window.howler.queueSprite(window.howler.voice, $pose.name)
@@ -58,7 +74,7 @@
             <%# Voice Volume %>
             <div class="mb-4" data-show="$voice.enabled">
               <label for="voiceVolume" class="form-label">Voice Volume</label>
-              <input type="range" class="form-range" id="voiceVolume" min="0.01" max="1" step="0.01" data-bind="voice.volume" data-persist="voice.volume" data-effect="window.howler.voice.volume($voice.volume)">
+              <input type="range" class="form-range" id="voiceVolume" min="0.01" max="1" step="0.01" data-bind="voice.volume" data-persist="voice.volume" data-effect="window.howler?.voice?.volume($voice.volume)">
             </div>
 
             <%# Pose Counter %>
@@ -76,7 +92,7 @@
             <%# Music Volume %>
             <div class="mb-4" data-show="$music.enabled">
               <label for="bgmVolume" class="form-label">Music Volume</label>
-              <input type="range" class="form-range" id="bgmVolume" min="0.01" max="1" step="0.01" data-bind="music.volume" data-persist="music.volume" data-effect="window.howler.music.volume($music.volume)">
+              <input type="range" class="form-range" id="bgmVolume" min="0.01" max="1" step="0.01" data-bind="music.volume" data-persist="music.volume" data-effect="window.howler?.music.volume($music.volume)">
             </div>
 
 
@@ -95,31 +111,32 @@
 
           <div class="mb-4">
             <h3>Color</h3>
-            <input type="radio" class="btn-check" name="colorOptions" id="colorGreen" autocomplete="off" checked>
-            <label class="btn btn-secondary" for="colorGreen">Green</label>
-
-            <input type="radio" class="btn-check" name="colorOptions" id="colorBlue" autocomplete="off">
-            <label class="btn btn-secondary" for="colorBlue">Blue</label>
-
-            <input type="radio" class="btn-check" name="colorOptions" id="colorMagenta" autocomplete="off">
-            <label class="btn btn-secondary" for="colorMagenta">Magenta</label>
-
-            <input type="radio" class="btn-check" name="colorOptions" id="colorYellow" autocomplete="off">
-            <label class="btn btn-secondary" for="colorYellow">Yellow</label>
+            <select 
+              data-effect="setColor($personalization.color)"
+              data-persist="personalization.color" 
+              data-bind="personalization.color"
+            >
+              <option value="#00FF00" selected>Green</option>
+              <option value="#0000FF">Blue</option>
+              <option value="#FF00FF">Magenta</option>
+              <option value="#FFFF00">Yellow</option>
+            </select>
           </div>
 
-          <div class="mb-4">
+
+
+          <div class="mb-4" data-signals="{'personalization': {'hat': '' }}">
             <h3>Hat</h3>
-            <input type="radio" class="btn-check" name="hatOptions" id="hatTop" autocomplete="off" checked>
+            <input type="radio" class="btn-check" name="hatOptions" id="hatTop" autocomplete="off" checked data-on:click="$personalization.hat = 'top'">
             <label class="btn btn-secondary" for="hatTop">Top</label>
 
-            <input type="radio" class="btn-check" name="hatOptions" id="hatCoonSkin" autocomplete="off">
+            <input type="radio" class="btn-check" name="hatOptions" id="hatCoonSkin" autocomplete="off" data-on:click="$personalization.hat = 'coonSkin'">
             <label class="btn btn-secondary" for="hatCoonSkin">Coon skin</label>
 
-            <input type="radio" class="btn-check" name="hatOptions" id="hatRainbow" autocomplete="off">
+            <input type="radio" class="btn-check" name="hatOptions" id="hatRainbow" autocomplete="off" data-on:click="$personalization.hat = 'rainbow'">
             <label class="btn btn-secondary" for="hatRainbow">Rainbow</label>
 
-            <input type="radio" class="btn-check" name="hatOptions" id="hatBeer" autocomplete="off">
+            <input type="radio" class="btn-check" name="hatOptions" id="hatBeer" autocomplete="off" data-on:click="$personalization.hat = 'beer'">
             <label class="btn btn-secondary" for="hatBeer">Beer</label>
           </div>
 

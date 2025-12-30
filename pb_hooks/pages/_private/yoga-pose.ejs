@@ -1,20 +1,31 @@
-<div id="yoga-pose" data-signals:pose="{'displayName': 'Seated', 'name': 'seated'}">
+<canvas id="godot-target"></canvas>
+
+<div id="yoga-pose"  data-signals:pose="{'displayName': 'Seated', 'name': 'seated'}">
   <model-viewer 
+    data-on:before-render="evt.target?.model?.materials[0].pbrMetallicRoughness.setBaseColorFactor($personalization.color)"
     data-attr:animation-name="$pose.name"
     data-attr:src="$model"
     data-attr:environment-image="$environment"
     id="human" 
+    touch-action="pan-y"
     src="<%= model %>" 
     animation-name="<%= pose.name %>" 
     alt="human" 
     shadow-intensity="1" 
-    auto-rotate disable-zoom touch-action="pan-y" 
+    auto-rotate
     environment-image="<%= environment %>" 
     autoplay camera-orbit="-45deg 80deg 6m" 
     camera-target="0m 0.5m 0m" 
-    animation-crossfade-duration="800"></model-viewer>
+    camera-controls
+    max-camera-orbit="auto 90deg auto"
+    skybox-height="2m"
+    animation-crossfade-duration="800"
+    interaction-prompt="none"
+  >
+  </model-viewer>
 
   <h1 class="title" data-text="$pose.displayName">
     <%= pose.displayName %>
   </h1>
 </div>
+

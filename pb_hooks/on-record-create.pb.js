@@ -36,7 +36,7 @@ onRecordCreate((e) => {
     }
 
     const data = {
-        model: '/man_12.gltf',
+        model: '/human2.glb',
         environment: '/spruit_sunrise_1k_HDR.hdr',
         pose,
         // variations

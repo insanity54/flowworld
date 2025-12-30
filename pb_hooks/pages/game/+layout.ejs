@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" data-bs-theme="dark">
+
+<head>
+  <title>game</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+  <script type="importmap">
+    {
+        "imports": {
+            "datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"
+        }
+    }
+  </script>
+  <%- include('datastar.ejs') %>
+</head>
+
+<body>
+  <%-slots.body || slot%>
+
+</body>
+
+</html>
