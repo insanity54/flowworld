@@ -15,9 +15,10 @@ serviceAccount:
 
 podAnnotations: {}
 podLabels: {}
-
 podSecurityContext: {}
 securityContext:
+  seccompProfile:
+    type: RuntimeDefault
   allowPrivilegeEscalation: false
   capabilities:
     drop:
