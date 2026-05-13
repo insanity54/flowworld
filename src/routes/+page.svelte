@@ -116,13 +116,12 @@
   </div>
 
   <div class="position-relative z-1 h-100 d-flex flex-column">
-    <header class="d-flex justify-content-between align-items-start p-3">
-      <div><YogaPose {pose} /></div>
+    <header class="d-flex justify-content-end align-items-start p-3">
       <div class="d-flex gap-2">
         <button class="btn btn-outline-light btn-sm rounded-pill" onclick={() => settingsOpen = !settingsOpen}>Settings</button>
-        <button class="btn btn-outline-light btn-sm rounded-pill" onclick={toggleTheme}>Theme</button>
       </div>
     </header>
+    <div class="mt-auto p-3"><YogaPose {pose} /></div>
   </div>
 </div>
 

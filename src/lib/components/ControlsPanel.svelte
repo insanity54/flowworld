@@ -162,12 +162,7 @@
 </script>
 
 <div class="controls-panel">
-  <div class="p-4 text-body-secondary text-center border-bottom">
-    <p id="title" class="mb-0 small">multiplayer.yoga</p>
-  </div>
-
   <div class="p-3">
-    <h2 class="h5 mb-3">Settings</h2>
     <div class="card p-3 mb-3 shadow-sm">
       <div class="mb-3">
         <label for="difficulty" class="form-label small">Difficulty</label>
