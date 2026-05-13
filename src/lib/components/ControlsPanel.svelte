@@ -215,10 +215,54 @@
         </div>
       </div>
     </div>
-  {:else}
+  {/if}
+
+  {#if import.meta.env.DEV}
+    <div class="p-3 border-top">
+      <h2 class="h5 mb-3">Debug data</h2>
+      <p class="small text-muted"><i>This section is only visible in development environment</i></p>
+      <div class="mb-3">
+        <label for="membership" class="form-label small">Membership Enabled</label>
+        <input type="checkbox" class="form-check-input ms-2" id="membership" bind:checked={membershipEnabled}>
+      </div>
+      <p class="small mb-1">Session ID: {sessionId}</p>
+      <p class="small mb-1">Connected clients: {clientCount}</p>
+      <pre class="small bg-dark text-light p-2 rounded"><code>{debugJson}</code></pre>
+    </div>
+  {/if}
+
+  <div class="p-3 border-top text-center small">
+    <h2 class="h5">About</h2>
+    <p>multiplayer.yoga is a worldwide yoga experience.</p>
+    <p>Each pose lasts 42 seconds. All visitors see the same pose at the same time.</p>
+    <p>There is no beginning, there is no end. Join any time and find your flow.</p>
+    <p>There are no logins, no usernames, no reputation to build. The focus here is presence.</p>
+    <p>Poses are chosen randomly with weighted probabilities, guiding the flow toward transitions that feel natural.</p>
+    <p>No streaks, no scores, no leaderboards. This isn't a game or a race, it's a space to build focus, grow stronger, and find calm.</p>
+
+    <hr>
+
+    <h2 class="h5">Credits</h2>
+    <p>Music created by <a class="text-warning" target="_blank" href="https://linktr.ee/TEMPHUiBIS">TEMPHUiBIS</a></p>
+
+    <hr>
+
+    <h2 class="h5">Author</h2>
+    <p>Hi I'm <a target="_blank" href="https://grimtech.net">Chris Grimmett</a>, author of multiplayer.yoga.</p>
+    <img class="img-fluid rounded" alt="Chris Grimmett, author of multiplayer.yoga" src="/chris2.jpg" style="max-width:200px">
+    <p class="mt-2">My dream is to support myself through building apps and websites that help people in their daily lives.</p>
+    {#if membershipEnabled}
+      <p>You are a member of multiplayer.yoga. Thank you so much!</p>
+    {:else}
+      <p>If you've found value here and want to support its continued growth, please consider becoming a member.</p>
+    {/if}
+    <p>Thank you for being here.</p>
+  </div>
+
+  {#if !membershipEnabled}
     <div class="p-3 border-top">
       <h2 class="h5 mb-3">Membership</h2>
-      <div class="card p-3 mb-3 shadow-sm small">
+      <div class="card p-3 mb-0 shadow-sm small">
         {#if lnStatus === 'idle' || lnStatus === 'loading'}
           <p class="text-center">Creating invoice...</p>
           <div class="text-center">
@@ -260,44 +304,6 @@
       </div>
     </div>
   {/if}
-
-  {#if import.meta.env.DEV}
-    <div class="p-3 border-top">
-      <h2 class="h5 mb-3">Debug data</h2>
-      <p class="small text-muted"><i>This section is only visible in development environment</i></p>
-      <div class="mb-3">
-        <label for="membership" class="form-label small">Membership Enabled</label>
-        <input type="checkbox" class="form-check-input ms-2" id="membership" bind:checked={membershipEnabled}>
-      </div>
-      <p class="small mb-1">Session ID: {sessionId}</p>
-      <p class="small mb-1">Connected clients: {clientCount}</p>
-      <pre class="small bg-dark text-light p-2 rounded"><code>{debugJson}</code></pre>
-    </div>
-  {/if}
-
-  <div class="p-3 border-top text-center small">
-    <h2 class="h5">About</h2>
-    <p>multiplayer.yoga is a worldwide yoga experience.</p>
-    <p>Each pose lasts 42 seconds. All visitors see the same pose at the same time.</p>
-    <p>There is no beginning, there is no end. Join any time and find your flow.</p>
-    <p>There are no logins, no usernames, no reputation to build. The focus here is presence.</p>
-    <p>Poses are chosen randomly with weighted probabilities, guiding the flow toward transitions that feel natural.</p>
-    <p>No streaks, no scores, no leaderboards. This isn't a game or a race, it's a space to build focus, grow stronger, and find calm.</p>
-
-    <hr>
-
-    <h2 class="h5">Credits</h2>
-    <p>Music created by <a class="text-warning" target="_blank" href="https://linktr.ee/TEMPHUiBIS">TEMPHUiBIS</a></p>
-
-    <hr>
-
-    <h2 class="h5">Author</h2>
-    <p>Hi I'm <a target="_blank" href="https://grimtech.net">Chris Grimmett</a>, author of multiplayer.yoga.</p>
-    <img class="img-fluid rounded" alt="Chris Grimmett, author of multiplayer.yoga" src="/chris2.jpg" style="max-width:200px">
-    <p class="mt-2">My dream is to support myself through building apps and websites that help people in their daily lives.</p>
-    <p>If you've found value here and want to support its continued growth, please consider becoming a member.</p>
-    <p>Thank you for being here.</p>
-  </div>
 </div>
 
 <style>
@@ -305,6 +311,7 @@
     height: 100%;
     overflow-y: auto;
     overscroll-behavior: contain;
+    padding-bottom: 12rem;
   }
   .controls-panel::-webkit-scrollbar {
     width: 6px;
