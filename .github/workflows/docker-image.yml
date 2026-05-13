@@ -9,31 +9,36 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    
-    - name: Code checkout
-      uses: actions/checkout@v4
-    -
-      name: Login to GHCR
+    - uses: actions/checkout@v4
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Build
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: production.Dockerfile
+        push: false
+        platforms: linux/amd64
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v4
+    - name: Login to GHCR
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-
-    -
-      name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-    -
-      name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-    -
-      name: Build and push
+    - name: Build and push
       uses: docker/build-push-action@v6
       with:
+        context: .
+        file: production.Dockerfile
         push: true
-        tags: ghcr.io/insanity54/flowworld:latest
+        tags: ghcr.io/insanity54/flowworld:latest,ghcr.io/insanity54/flowworld:${{ github.sha }}
         platforms: linux/amd64
