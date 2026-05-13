@@ -4,6 +4,8 @@
   import ControlsPanel from '$lib/components/ControlsPanel.svelte';
   import { soundManager } from '$lib/client/sound';
 
+  let { data } = $props();
+
   let pose = $state<{ id: string; name: string; displayName: string } | null>(null);
   let isDark = $state(true);
   let settingsOpen = $state(false);
@@ -131,7 +133,7 @@
       <span class="fw-bold">Settings</span>
       <button title="settings" class="btn-close" onclick={() => settingsOpen = false}></button>
     </div>
-    <ControlsPanel {pose} {isDark} bind:membershipEnabled bind:fx clientCount={remoteCount + 1} sessionId={sessionId ?? ''} />
+    <ControlsPanel {pose} {isDark} bind:membershipEnabled bind:fx clientCount={remoteCount + 1} sessionId={sessionId ?? ''} membershipsDisabled={data.membershipsDisabled} />
   </div>
 {/if}
 

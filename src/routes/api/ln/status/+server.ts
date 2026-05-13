@@ -7,6 +7,10 @@ export async function POST({ request }: { request: Request }) {
     return json({ error: 'invoiceId required' }, { status: 400 });
   }
 
+  if (env.MEMBERSHIPS_DISABLED === 'true' || env.MEMBERSHIPS_DISABLED === '1') {
+    return json({ error: 'Memberships temporarily disabled' }, { status: 503 });
+  }
+
   if (!env.BTCPAY_URL || !env.BTCPAY_STORE_ID || !env.BTCPAY_API_KEY) {
     return json({ error: 'BTCPay not configured on this server' }, { status: 501 });
   }

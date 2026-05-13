@@ -2,10 +2,9 @@ services:
   flowworld:
     build:
       context: .
-      dockerfile: development.Dockerfile
+      dockerfile: production.Dockerfile
     image: ghcr.io/insanity54/flowworld
     ports:
       - "8095:8095"
     env_file:
-      - .env.development.local
-
+      - .env.production.local

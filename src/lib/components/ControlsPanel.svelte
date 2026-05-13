@@ -9,6 +9,7 @@
     clientCount = 0,
     fx = $bindable({ color: '#00FF00' }),
     sessionId = '',
+    membershipsDisabled = false,
   } = $props();
 
   const PERSIST_KEY = 'flowworld-prefs';
@@ -73,7 +74,7 @@
   });
 
   $effect(() => {
-    if (sessionId && !membershipEnabled && lnStatus === 'idle') {
+    if (sessionId && !membershipEnabled && !membershipsDisabled && lnStatus === 'idle') {
       createInvoice(2000);
     }
   });
@@ -264,7 +265,9 @@
     <div class="p-3 border-top">
       <h2 class="h5 mb-3">Membership</h2>
       <div class="card p-3 mb-0 shadow-sm small">
-        {#if lnStatus === 'idle' || lnStatus === 'loading'}
+        {#if membershipsDisabled}
+          <p class="text-center text-muted mb-0">Memberships temporarily disabled</p>
+        {:else if lnStatus === 'idle' || lnStatus === 'loading'}
           <p class="text-center">Creating invoice...</p>
           <div class="text-center">
             <div class="spinner-border spinner-border-sm" role="status"></div>
