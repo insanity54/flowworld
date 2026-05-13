@@ -1,0 +1,3 @@
+# deployment.yaml
+deployments:
+  - path: deployment

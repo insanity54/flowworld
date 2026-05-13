@@ -1,0 +1,8 @@
+discriminator: flowworld-{{ target.name }}
+
+targets:
+  - name: prod
+    context: ""
+    namespace: yoga
+    args:
+      image_tag: latest

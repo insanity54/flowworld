@@ -1,0 +1,21 @@
+deployments:
+  - helm:
+      chart: ../charts/flowworld
+      values:
+        image:
+          repository: ghcr.io/insanity54/flowworld
+          tag: "{{ args.image_tag }}"
+          pullPolicy: Always
+        envFromSecret: flowworld
+        ingress:
+          enabled: true
+          className: nginx
+          hosts:
+            - host: multiplayer.yoga
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - multiplayer.yoga
+              secretName: multiplayer-yoga-tls
