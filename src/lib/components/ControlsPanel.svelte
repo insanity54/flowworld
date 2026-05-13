@@ -1,6 +1,6 @@
 <script lang="ts">
   import { soundManager } from '$lib/client/sound';
-  import { onMount, onDestroy, tick } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
   let {
     pose,
@@ -78,6 +78,14 @@
     }
   });
 
+  $effect(() => {
+    if (lnStatus === 'pending' && lnBolt11 && qrCanvas) {
+      import('qrcode').then(({ default: QRCode }) => {
+        QRCode.toCanvas(qrCanvas, lnBolt11!, { width: 220, margin: 1 });
+      }).catch(() => {});
+    }
+  });
+
   onDestroy(() => {
     stopPolling();
   });
@@ -111,13 +119,6 @@
       lnBolt11 = data.BOLT11;
       lnStatus = 'pending';
       startPolling();
-      await tick();
-      if (qrCanvas && lnBolt11) {
-        try {
-          const { default: QRCode } = await import('qrcode');
-          await QRCode.toCanvas(qrCanvas, lnBolt11, { width: 220, margin: 1 });
-        } catch { /* QR render failed */ }
-      }
     } catch (e) {
       lnError = e instanceof Error ? e.message : 'Failed to create invoice';
       lnStatus = 'error';
