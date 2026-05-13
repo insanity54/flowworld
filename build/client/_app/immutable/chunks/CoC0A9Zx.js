@@ -1,1 +1,0 @@
-import{l as p,m as s,o as a,b as c,q as u,t as _}from"./DTRcPaPU.js";import{B as f}from"./nPiNxArG.js";function l(n){return n.toString=()=>(p(),""),n}function d(n,e,...r){var i=new f(n);c(()=>{const t=e()??null;t==null&&_(),i.ensure(t,t&&(o=>t(o,...r)))},u)}function g(n,e){const r=(i,...t)=>{var o=a;s(n);try{return e(i,...t)}finally{s(o)}};return l(r),r}export{d as s,g as w};

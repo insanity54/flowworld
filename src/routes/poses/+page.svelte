@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
+  import type { Pose } from '$lib/server/poses';
 
-  let { data, form } = $props();
-  let poses = $derived(data.poses);
+  let { data } = $props();
+  let poses: Pose[] = $derived(data.poses);
 
   let selectedId = $state<string | null>(null);
-  let selectedPose = $derived(poses.find(p => p.id === selectedId) ?? null);
+  let selectedPose = $derived(poses.find(p => p.name === selectedId) ?? null);
 
   function selectPose(id: string) {
     selectedId = selectedId === id ? null : id;
@@ -26,7 +26,7 @@
     const edges: Array<{ from: number; to: number }> = [];
     for (let i = 0; i < poses.length; i++) {
       for (const nId of poses[i].neighbors) {
-        const j = poses.findIndex(p => p.id === nId);
+        const j = poses.findIndex(p => p.name === nId);
         if (j > i) edges.push({ from: i, to: j });
       }
     }
@@ -55,14 +55,14 @@
           stroke="rgba(255,255,255,0.15)" stroke-width="1.5"
         />
       {/each}
-      {#each poses as pose, i (pose.id)}
+      {#each poses as pose, i (pose.name)}
         {@const pos = positions[i]}
-        <g onclick={() => selectPose(pose.id)} style="cursor: pointer;" class="node-group">
+        <g onclick={() => selectPose(pose.name)} style="cursor: pointer;" class="node-group">
           <circle
             cx={pos.x} cy={pos.y} r="14"
-            fill={selectedId === pose.id ? rarityColor(pose.rarity) : 'rgba(255,255,255,0.1)'}
-            stroke={selectedId === pose.id ? '#fff' : rarityColor(pose.rarity)}
-            stroke-width={selectedId === pose.id ? 3 : 2}
+            fill={selectedId === pose.name ? rarityColor(pose.rarity) : 'rgba(255,255,255,0.1)'}
+            stroke={selectedId === pose.name ? '#fff' : rarityColor(pose.rarity)}
+            stroke-width={selectedId === pose.name ? 3 : 2}
           />
           <text x={pos.x} y={pos.y + 28} text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="sans-serif">
 {pose.displayName}
@@ -74,98 +74,53 @@
 
   <div class="border-start" style="width: 360px; overflow-y: auto; background: var(--bs-body-bg);">
     <div class="p-3 border-bottom">
-      <h5 class="mb-0">Pose Editor</h5>
+      <h5 class="mb-0">Pose Reference</h5>
       <small class="text-muted">{poses.length} poses</small>
     </div>
 
     {#if selectedPose}
       <div class="p-3">
-        <form method="post" action="?/update" use:enhance>
-          <input type="hidden" name="id" value={selectedPose.id} />
-          <div class="mb-2">
-            <label class="form-label small">Name (slug)</label>
-            <input type="text" class="form-control form-control-sm" value={selectedPose.name} disabled />
-          </div>
-          <div class="mb-2">
-            <label class="form-label small">Display Name</label>
-            <input type="text" name="display_name" class="form-control form-control-sm" value={selectedPose.displayName} required />
-          </div>
-          <div class="mb-2">
-            <label class="form-label small">Rarity</label>
-            <input type="number" name="rarity" class="form-control form-control-sm" min="1" max="5" value={selectedPose.rarity} />
-          </div>
-          <div class="mb-2">
-            <label class="form-label small">Difficulty</label>
-            <select name="difficulty" class="form-select form-select-sm">
-              <option value="beginner" selected={selectedPose.difficulty === 'beginner'}>Beginner</option>
-              <option value="intermediate" selected={selectedPose.difficulty === 'intermediate'}>Intermediate</option>
-              <option value="advanced" selected={selectedPose.difficulty === 'advanced'}>Advanced</option>
-              <option value="expert" selected={selectedPose.difficulty === 'expert'}>Expert</option>
-            </select>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-primary btn-sm flex-grow-1">Save</button>
-            <button class="btn btn-outline-danger btn-sm" formaction="?/deletePose">Delete</button>
-          </div>
-        </form>
-
-        <hr />
-
-        <h6 class="small">Neighbors</h6>
-        <ul class="list-unstyled small mb-2">
-          {#each selectedPose.neighbors as nId}
-            {@const n = poses.find(p => p.id === nId)}
-            <li class="d-flex justify-content-between align-items-center py-1">
-              <span>{n?.displayName ?? nId}</span>
-              <form method="post" action="?/removeNeighbor" use:enhance>
-                <input type="hidden" name="pose_id" value={selectedPose.id} />
-                <input type="hidden" name="neighbor_id" value={nId} />
-                <button class="btn btn-outline-light btn-sm py-0 px-1">&times;</button>
-              </form>
-            </li>
-          {/each}
-        </ul>
-
-        <form method="post" action="?/addNeighbor" use:enhance>
-          <input type="hidden" name="pose_id" value={selectedPose.id} />
-          <div class="input-group input-group-sm">
-            <select name="neighbor_id" class="form-select form-select-sm">
-              <option value="">Add neighbor...</option>
-              {#each poses.filter(p => p.id !== selectedPose.id && !selectedPose.neighbors.includes(p.id)) as pose}
-                <option value={pose.id}>{pose.displayName}</option>
-              {/each}
-            </select>
-            <button class="btn btn-outline-light btn-sm">+</button>
-          </div>
-        </form>
+        <h6>{selectedPose.displayName}</h6>
+        <table class="table table-sm small mb-2">
+          <tbody>
+            <tr><td class="text-muted">Name</td><td>{selectedPose.name}</td></tr>
+            <tr><td class="text-muted">Rarity</td><td>{selectedPose.rarity}</td></tr>
+            <tr><td class="text-muted">Difficulty</td><td>{selectedPose.difficulty}</td></tr>
+            <tr><td class="text-muted">Mirror</td><td>{selectedPose.mirror || '—'}</td></tr>
+            <tr><td class="text-muted">Neighbors</td><td>{selectedPose.neighbors.length}</td></tr>
+          </tbody>
+        </table>
+        <details class="small">
+          <summary class="text-muted">Neighbor list</summary>
+          <ul class="list-unstyled mt-1 mb-0">
+            {#each selectedPose.neighbors as nId}
+              <li>{nId}</li>
+            {/each}
+          </ul>
+        </details>
       </div>
     {:else}
       <div class="p-3">
-        <h6 class="small">New Pose</h6>
-        <form method="post" action="?/create" use:enhance>
-          <div class="mb-2">
-            <label class="form-label small">Name (slug)</label>
-            <input type="text" name="name" class="form-control form-control-sm" required placeholder="e.g. downwardDog" />
-          </div>
-          <div class="mb-2">
-            <label class="form-label small">Display Name</label>
-            <input type="text" name="display_name" class="form-control form-control-sm" required placeholder="e.g. Downward Dog" />
-          </div>
-          <div class="mb-2">
-            <label class="form-label small">Rarity</label>
-            <input type="number" name="rarity" class="form-control form-control-sm" min="1" max="5" value="1" />
-          </div>
-          <div class="mb-2">
-            <label class="form-label small">Difficulty</label>
-            <select name="difficulty" class="form-select form-select-sm">
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-              <option value="expert">Expert</option>
-            </select>
-          </div>
-          <button class="btn btn-success btn-sm w-100">Create Pose</button>
-        </form>
+        <table class="table table-sm small">
+          <thead>
+            <tr>
+              <th>Pose</th>
+              <th>R</th>
+              <th>Difficulty</th>
+            </tr>
+          </thead>
+          <tbody>
+            {#each poses as pose (pose.name)}
+              <tr onclick={() => selectPose(pose.name)} style="cursor:pointer;" class={selectedId === pose.name ? 'table-active' : ''}>
+                <td>{pose.displayName}</td>
+                <td>
+                  <span class="badge" style="background:{rarityColor(pose.rarity)}">{pose.rarity}</span>
+                </td>
+                <td class="text-capitalize">{pose.difficulty}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
       </div>
     {/if}
   </div>
