@@ -1,0 +1,104 @@
+<script type="module">
+    import * as THREE from 'three';
+
+    import {
+        GLTFLoader
+    } from 'three/addons/loaders/GLTFLoader.js';
+
+
+    const clock = new THREE.Clock()
+    // --- animation state ---
+    let mixer;
+    let currentAction;
+    let renderer;
+
+    // All 51 animations live here
+    const actions = new Map();
+
+    const container = document.getElementById('yoga-pose-display');
+
+    // --- basic scene ---
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 100)
+    camera.position.set(0, 1.5, 3)
+
+
+    renderer = new THREE.WebGLRenderer({
+        antialias: true
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    renderer.shadowMap.enabled = true;
+
+    container.appendChild(renderer.domElement);
+    window.addEventListener('resize', onWindowResize);
+
+
+    // --- load model ---
+    const loader = new GLTFLoader()
+    loader.load('/human2.glb', (gltf) => {
+        const model = gltf.scene
+        scene.add(model)
+
+        mixer = new THREE.AnimationMixer(model)
+
+        // Dynamically create actions for *all* animations
+        for (const clip of gltf.animations) {
+            const action = mixer.clipAction(clip)
+            action.enabled = true
+            actions.set(clip.name, action)
+        }
+
+        // Start with the first animation
+        const first = gltf.animations[0]?.name
+        if (first) {
+            playAnimation(first)
+        }
+    })
+
+
+    function onWindowResize() {
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+    }
+
+    function playAnimation(name, fadeDuration = 0.25) {
+        const next = actions.get(name)
+        if (!next) return
+        if (next === currentAction) return
+
+        next.reset()
+        next.play()
+
+        if (currentAction) {
+            currentAction.crossFadeTo(next, fadeDuration, false)
+        }
+
+        currentAction = next
+    }
+
+    function animate() {
+        requestAnimationFrame(animate)
+
+        const delta = clock.getDelta()
+        mixer?.update(delta)
+
+        renderer.render(scene, camera)
+    }
+
+    animate()
+
+    // by name
+    playAnimation('Run')
+    playAnimation('Idle')
+    playAnimation('Attack_07')
+
+    // by index
+    const names = [...actions.keys()]
+    playAnimation(names[12])
+</script>

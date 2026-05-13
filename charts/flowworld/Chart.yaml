@@ -1,0 +1,16 @@
+apiVersion: v2
+name: flowworld
+description: A Helm chart for Flow World - a global yoga experience platform
+type: application
+version: 0.1.0
+appVersion: "1.7.4"
+home: https://multiplayer.yoga
+sources:
+  - https://github.com/insanity54/flowworld
+keywords:
+  - yoga
+  - pocketbase
+  - multiplayer
+maintainers:
+  - name: Chris Grimmett
+    email: chris@grimtech.net

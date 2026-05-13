@@ -4,6 +4,7 @@ A global yoga experience
 
 ## Project Requirements
 
+* [ ] no nonsense kubernetes deployment that happens without thinking about it. git tag, git push. done. (kluctl reconciliation.)
 * [x] Global flow, a randomly selected flow that everyone can do together. Each pose is held for 42 seconds.
 * [x] This is a zero-stress website. We don't give the user any opportunities to fail.
 * [x] NO LOGINS/ACCOUNTS. LOGINS ARE STRESSFUL.
@@ -62,7 +63,9 @@ Stylized Character by Zsky [CC-BY] (https://creativecommons.org/licenses/by/3.0/
 
 * [ ] people can donate to get themselves immortalized and added to the app as a player selectable model
 
+### btcpay API permissions needed
 
+  * btcpay.store.cancreatelightninginvoice
 
 ## Gamification
 

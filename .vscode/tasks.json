@@ -9,9 +9,6 @@
       "isBackground": true,
       "options": {
         "cwd": "${workspaceFolder}",
-      },
-      "runOptions": {
-        "runOn": "folderOpen"
       }
     }
   ]

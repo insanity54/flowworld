@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "coder": {
+      "description": "agent optimized to write code",
+      "model": "openrouter/pareto-code",
+      "min_coding_score": 0.33
+    }
+  }
+}

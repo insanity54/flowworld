@@ -1,6 +1,5 @@
 {
     "recommendations": [
         "mikestead.dotenv",
-        "prisma.prisma"
     ]
 }

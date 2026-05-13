@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../persistar"
+		},
+		{
+			"path": "../happydom-issue"
+		},
+		{
+			"path": "../data-persist-issue"
+		}
+	],
+	"settings": {
+		"js-beautify.indent_size": 4
+	}
+}
