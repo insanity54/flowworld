@@ -1,4 +1,5 @@
 import { addClient, registerSession } from '$lib/server/realtime';
+import { getCurrentPose } from '$lib/server/yoga-timer';
 
 export function GET() {
   const sessionId = crypto.randomUUID();
@@ -8,6 +9,10 @@ export function GET() {
     start(controller) {
       addClient(controller);
       controller.enqueue(new TextEncoder().encode(`event: connected\ndata: ${JSON.stringify({ id: sessionId })}\n\n`));
+      const currentPose = getCurrentPose();
+      if (currentPose) {
+        controller.enqueue(new TextEncoder().encode(`event: pose\ndata: ${JSON.stringify(currentPose)}\n\n`));
+      }
       registerSession(sessionId);
 
       const interval = setInterval(() => {

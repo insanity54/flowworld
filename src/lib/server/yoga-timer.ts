@@ -60,6 +60,13 @@ function selectNextPose(): void {
   }
 }
 
+export function getCurrentPose(): { id: string; name: string; displayName: string } | null {
+  if (!lastPoseId) return null;
+  const pose = poseMap[lastPoseId];
+  if (!pose) return null;
+  return { id: lastPoseId, name: pose.name, displayName: pose.displayName };
+}
+
 function broadcastPose(id: string): void {
   const pose = poseMap[id];
   broadcast('pose', {
